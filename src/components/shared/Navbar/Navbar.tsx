@@ -138,7 +138,7 @@ const Navbar = () => {
                   Logout
                 </Button>
               ):
-              <Button asChild className="text-sm">
+              <Button asChild className="text-sm rounded-full px-7">
                   <Link href="/login">Login</Link>
                 </Button>
                 }

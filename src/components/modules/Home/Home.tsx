@@ -1,9 +1,9 @@
 import React from 'react'
 import Hero from './Banner/Hero'
 import LatestBlog from './LatestBlog/LatestBlog'
-import FAQ from './FAQ/FAQ'
 import Project from './Project/Project'
 import About from './About/About'
+import ContactForm from '../Contact/ContactForm'
 
 const Home = () => {
   return (
@@ -12,7 +12,7 @@ const Home = () => {
       <About></About>
       <Project></Project>
       <LatestBlog></LatestBlog>
-      <FAQ></FAQ>
+      <ContactForm></ContactForm>
     </div>
   )
 }

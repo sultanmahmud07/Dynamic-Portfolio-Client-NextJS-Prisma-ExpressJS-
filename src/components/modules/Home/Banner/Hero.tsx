@@ -1,44 +1,55 @@
+import Image from "next/image";
 import Link from "next/link";
-
+import heroImage from "@@/home/hero-image.png"
+import { Button } from "@/components/ui/button";
 export default async function Hero() {
   return (
-    <div>
-      <div className="max-h-screen w-full relative">
-        {/* Crimson Depth */}
-        <div
-          className="absolute inset-0 z-0"
-          style={{
-            background:
-              "radial-gradient(125% 125% at 50% 100%, #000000 40%, #2b0707 100%)",
-          }}
-        />
+    <section className="bg-secondary relative pt-[140px] pb-[125px]">
+      <div className="main-container">
+        <div className="grid grid-cols-1 2xl:-mx-4">
+          <div className="xl:pt-12">
+            <span className="font-Syne text-black-800 font-bold text-2xl lg:text-[32px] leading-none flex flex-wrap items-center mb-3 aos-init aos-animate">
+              {/* <span className="mr-6"></span> */}
 
-        <section className="relative flex flex-col items-center justify-center text-center py-28 px-6 text-white">
-          {/* Headline */}
-          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight max-w-5xl leading-tight">
-            Read. Learn. Share. <br className="hidden md:block" />
-            Ideas That Shape the Future
-          </h1>
 
-          {/* Subheadline */}
-          <p className="mt-6 text-lg md:text-xl max-w-2xl">
-            Discover in-depth articles, tutorials, and thought-provoking stories
-            from a global network of creators. Stay updated with fresh insights
-            on technology, design, productivity, and personal growth—all in one
-            place.
-          </p>
+              Hello, I’m
 
-          {/* CTA */}
-          <div className="mt-10 flex flex-col sm:flex-row gap-4">
-            <Link
-              href="/blogs"
-              className="inline-flex items-center justify-center px-8 py-4 font-medium rounded-xl border border-input hover:bg-accent hover:text-accent-foreground transition"
-            >
-              Explore Blogs
-            </Link>
+            </span>
+            <h1 className="relative z-[1] font-Syne text-black-800 font-bold text-[80px] lg:text-[100px] xl:text-[120px] 2xl:text-[140px] leading-[64px] lg:leading-[80px] xl:leading-[90px] 2xl:leading-[110px] 2xl:before:w-[120px] xl:before:w-[100px] 2xl:before:h-[120px] xl:before:h-[100px] before:rounded-full before:bg-primary before:block before:absolute before:top-[0px] before:left-0 before:-z-[1] lg:before:w-[85px] lg:before:h-[85px] before:w-[70px] before:h-[70px] aos-init aos-animate">Sultan</h1>
+            <h2 className="font-Syne text-black-800 font-bold text-[80px] lg:text-[100px] xl:text-[120px] 2xl:text-[140px] leading-[64px] lg:leading-[80px] xl:leading-[90px] 2xl:leading-[110px] mb-[20px] aos-init aos-animate">Mahmud</h2>
+            <p className="font-Syne text-black-700 font-bold text-lg md:text-xl xl:text-2xl leading-tight mb-[30px] aos-init aos-animate">Product
+              Developer |
+              Based in
+              Bangladeshi</p>
+            <div className="flex flex-wrap mb-[50px] md:mb-[60px] xl:mb-[70px] 2xl:mb-[80px]">
+<Link href="/contact">
+<Button size="xl" className="flex seco items-center flex-wrap gap-3 mr-2 group font-bold ">
+  Let&apos;s Talk
+<span className="">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+</span>
+</Button>
+</Link>
+<Link href="/contact">
+<Button size="xl" variant="outline" className="flex seco items-center flex-wrap gap-3 mr-2 group font-bold ">
+  My Work
+<span className="">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+</span>
+</Button>
+</Link>
+            </div>
           </div>
-        </section>
+        </div>
+        <div className="hidden md:block">
+          <Image
+          alt="hero-image"
+            src={heroImage}
+            width={1000}
+            className="absolute top-0 right-0 md:max-w-[420px] lg:max-w-[570px] xl:max-w-[650px] 2xl:max-w-[initial] aos-init aos-animate"
+          />
+        </div>
       </div>
-    </div>
+    </section>
   );
 }
