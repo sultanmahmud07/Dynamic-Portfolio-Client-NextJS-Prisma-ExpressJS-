@@ -1,55 +1,121 @@
+
+import logo from "../../../public/logo.jpg";
+import { FaYoutube } from "react-icons/fa";
+import { FaFacebookF } from "react-icons/fa";
+import { FaLinkedinIn } from "react-icons/fa";
+import { IoLogoInstagram } from "react-icons/io5";
+import { FaPhoneAlt } from "react-icons/fa";
+import { MdEmail } from "react-icons/md";
+import { IoLocationSharp } from "react-icons/io5";
+import Image from "next/image";
 import Link from "next/link";
 
-export default function Footer() {
-  const currentYear = new Date().getFullYear();
+const Footer = () => {
 
+// console.log(books.data)
   return (
-    <footer className="relative w-full overflow-hidden pt-12 pb-10 ">
-      {/* Background Layer */}
-      <div
-        className="absolute inset-0 z-0"
-        style={{
-          background:
-            "radial-gradient(125% 125% at 50% 60%, #000000 40%, #010133 100%)",
-        }}
-      />
-
-      {/* Content Layer */}
-      <div className="relative z-10 container mx-auto px-6 sm:px-8 md:px-12 lg:px-20 xl:px-28 text-white">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
-          {/* Left */}
-          <div>
-            <h2 className="text-white text-xl font-semibold mb-1">
-              Next level™
-            </h2>
-            <p className="text-sm text-gray-400">Smart blog System</p>
-          </div>
-
-          {/* Center Nav */}
-          <div className="flex flex-wrap justify-center md:justify-start space-x-6 text-sm">
-            <Link href="/" className="hover:text-white transition-colors">
-              Home
-            </Link>
-            <Link href="/events" className="hover:text-white transition-colors">
-              Events
-            </Link>
-            <Link href="/about" className="hover:text-white transition-colors">
-              About
-            </Link>
-            <Link
-              href="/contact"
-              className="hover:text-white transition-colors"
+    <section className="bg-background border-t mt-10 text-sm pt-10">
+      <div className="main-container flex flex-col md:flex-row py-10 gap-5 md:gap-14">
+        <div className="w-full text-muted-foreground md:w-1/3">
+          <Image
+            src={logo}
+            alt="logo"
+            width={300}
+            className="w-28"
+          />
+          <p className="pt-2">Empowering Readers, One Book at a Time.</p>
+           <p className="py-2">Discover, borrow, and manage books with ease through our simple and intuitive library system.</p>
+          <div className="flex items-center gap-3 py-5">
+            <a href="https://www.facebook.com/joltorongo.awt" className="flex items-center justify-center transition text-primary text-xl">
+              <FaFacebookF />
+            </a>
+            <a href="https://www.instagram.com/jol.torongo.coxbazar" className="flex items-center justify-center transition text-primary text-xl">
+              <IoLogoInstagram />
+            </a>
+            <a href="https://www.linkedin.com/company/joltorongo" className="flex items-center justify-center transition text-primary text-xl">
+              <FaLinkedinIn />
+            </a>
+            <a
+              href="https://www.youtube.com/@JoltorongoAWT"
+              className="flex items-center justify-center transition text-primary text-xl"
             >
-              Contact
-            </Link>
+              <FaYoutube />
+            </a>
           </div>
-
-          {/* Right */}
-          <div className="text-sm text-gray-400">
-            © {currentYear} next level team. All rights reserved.
+        </div>
+        <div className="w-full md:w-2/3 grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div className="flex flex-col gap-3">
+            <h6 className="font-semibold text-xs py-1 uppercase">Menu</h6>
+            <ul className="flex flex-col gap-3 text-muted-foreground text-sm">
+              <li><Link href="/">Home</Link></li>
+              <li><Link href="/boos">Books</Link></li>
+              <li><Link href="/create-book">New Book</Link></li>
+              <li><Link href="/borrow-summary">Borrow Summary</Link></li>
+              <li><Link href="/about">About us</Link></li>
+            </ul>
+          </div>
+          <div className="flex flex-col gap-3">
+            <h6 className="font-semibold text-xs py-1 uppercase">Recent Books</h6>
+            <ul className="flex flex-col gap-3 text-muted-foreground text-sm">
+                            <li><Link href="/about">About us</Link></li>
+                            <li><Link href="/about">About us</Link></li>
+                            <li><Link href="/about">About us</Link></li>
+                            <li><Link href="/about">About us</Link></li>
+                            <li><Link href="/about">About us</Link></li>
+              {/* {
+                books?.data?.slice(0, 5)?.map((item, i) => {
+                  return(
+                      <li key={i}><Link href="/">{item?.title}</Link></li>
+                  )
+                })
+              } */}
+            </ul>
+          </div>
+          <div className="flex flex-col gap-3">
+            <h6 className="font-semibold text-xs py-1 uppercase">Contacts Info</h6>
+            <div className="flex gap-3">
+              <div className="icon w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white">
+                <span className="text-lg">
+                  <FaPhoneAlt />
+                </span>
+              </div>
+              <div className="info">
+                <p className="font-semibold">Call us</p>
+                <span className="text-muted-foreground">+8801327357894</span>
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <div className="icon w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white">
+                <span className="text-lg">
+                  <MdEmail />
+                </span>
+              </div>
+              <div className="info">
+                <p className="font-semibold">Mail Us</p>
+                <span className="text-muted-foreground">hello@library.com</span>
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <div className="icon w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white shrink-0">
+                <span className="text-lg">
+                  <IoLocationSharp />
+                </span>
+              </div>
+              <div className="info flex-1">
+                <p className="font-semibold">Visit Us</p>
+                <span className="text-muted-foreground text-sm">
+                  Banani, Dhaka Bangladesh.
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </footer>
+      <p className="bg-primary text-sm py-3 md:py-4 text-center text-white">
+        © {new Date().getFullYear()} Parcel Delivery System. All rights reserved.
+      </p>
+    </section>
   );
-}
+};
+
+export default Footer;

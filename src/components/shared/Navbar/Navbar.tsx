@@ -43,10 +43,9 @@ const Navbar = () => {
   const navigationLinks = [
     { href: "/", label: "Home", role: "PUBLIC" },
     { href: "/about", label: "About", role: "PUBLIC" },
-    { href: "/team", label: "Our Team", role: "PUBLIC" },
-    { href: "/track", label: "Tracking", role: "PUBLIC" },
-    { href: "/faq", label: "FAQ", role: "PUBLIC" },
-    { href: "/contact", label: "Contact Us", role: "PUBLIC" }
+    { href: "/projects", label: "Projects", role: "PUBLIC" },
+    { href: "/blogs", label: "Blogs", role: "PUBLIC" },
+    { href: "/contact", label: "Contact Me", role: "PUBLIC" }
   ];
 
   return (
@@ -111,7 +110,7 @@ const Navbar = () => {
                     <React.Fragment key={index}>
                       {
                         link.role === "PUBLIC" && (
-                          <li className=" md:mx-2 py-2 lg:py-6 relative">
+                          <li className=" md:mx-1 py-2 lg:py-6 relative">
                             <NavLink
                               onClick={() => setNavToggle(false)}
                               href={link.href}

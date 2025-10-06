@@ -1,4 +1,5 @@
 
+import ShareBanner from "@/components/shared/ShareBanner";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -13,7 +14,8 @@ const AllBlogsPage = async () => {
   // });
   // const { data: blogs } = await res.json();
   return (
-    <div className="py-30 px-4 max-w-7xl mx-auto">
+    <div className="">
+      <ShareBanner title={"My Blogs"}></ShareBanner>
       <h2 className="text-center text-4xl">All Blogs</h2>
       <div className="grid grid-cols-3 gap-4 mx-auto max-w-6xl my-5">
         {/* {blogs.map((blog: any) => (
