@@ -4,7 +4,6 @@ import React from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
 import {
   Form,
   FormControl,
@@ -15,8 +14,6 @@ import {
 } from "@/components/ui/form";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
-import { login } from "@/actions/auth";
-import { toast } from "sonner";
 
 // type LoginFormValues = {
 //   email: string;
@@ -47,13 +44,8 @@ export default function LoginForm() {
       console.error(err);
     }
   };
-
-  const handleSocialLogin = (provider: "google" | "github") => {
-    console.log(`Login with ${provider}`);
-  };
-
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-50">
+    <div className="flex justify-center items-center pt-20 md:pt-32">
       <div className="space-y-6 w-full max-w-md bg-white p-8 rounded-lg shadow-md">
         <Form {...form}>
           <form
@@ -112,22 +104,7 @@ export default function LoginForm() {
           </form>
         </Form>
         {/* Social Login Buttons */}
-        <div className="flex flex-col gap-3 mt-4">
-          <Button
-            variant="outline"
-            className="flex items-center justify-center gap-2"
-            onClick={() => handleSocialLogin("github")}
-          >
-            {/* GitHub */}
-            <Image
-              src="https://img.icons8.com/ios-glyphs/24/github.png"
-              alt="GitHub"
-              className="w-5 h-5"
-              width={20}
-              height={20}
-            />
-            Login with GitHub
-          </Button>
+        <div className="flex flex-col gap-3 mt-3">
 
           <Button
             variant="outline"
@@ -149,12 +126,6 @@ export default function LoginForm() {
             Login with Google
           </Button>
         </div>
-        <p className="text-center text-sm text-gray-500 mt-4">
-          Don’t have an account?{" "}
-          <Link href="/register" className="text-blue-500 hover:underline">
-            Register
-          </Link>
-        </p>
       </div>
     </div>
   );

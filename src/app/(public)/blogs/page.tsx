@@ -1,4 +1,5 @@
 
+import Blogs from "@/components/modules/Blogs/Blogs";
 import ShareBanner from "@/components/shared/ShareBanner";
 import { Metadata } from "next";
 
@@ -16,12 +17,7 @@ const AllBlogsPage = async () => {
   return (
     <div className="">
       <ShareBanner title={"My Blogs"}></ShareBanner>
-      <h2 className="text-center text-4xl">All Blogs</h2>
-      <div className="grid grid-cols-3 gap-4 mx-auto max-w-6xl my-5">
-        {/* {blogs.map((blog: any) => (
-          <BlogCard key={blog.id} post={blog} />
-        ))} */}
-      </div>
+      <Blogs></Blogs>
     </div>
   );
 };

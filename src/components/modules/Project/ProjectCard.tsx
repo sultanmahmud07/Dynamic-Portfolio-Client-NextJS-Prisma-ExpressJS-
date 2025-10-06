@@ -5,7 +5,7 @@ import Link from 'next/link'
 import React from 'react'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const BlogCard = ({ news }: { news: any }) => {
+const ProjectCard = ({ news }: { news: any }) => {
       return (
             <div
                   className="group flex flex-col gap-2 md:gap-3 news-card  bg-white overflow-hidden"
@@ -34,4 +34,4 @@ const BlogCard = ({ news }: { news: any }) => {
       )
 }
 
-export default BlogCard
+export default ProjectCard
