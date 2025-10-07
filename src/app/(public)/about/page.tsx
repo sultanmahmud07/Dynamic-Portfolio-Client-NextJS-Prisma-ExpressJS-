@@ -11,7 +11,6 @@ const AboutPage = () => {
       <VisionSection></VisionSection>
       <ResumeSection></ResumeSection>
       <OurTestimonials></OurTestimonials>
-      {/* <FAQ></FAQ> */}
     </div>
   );
 };
