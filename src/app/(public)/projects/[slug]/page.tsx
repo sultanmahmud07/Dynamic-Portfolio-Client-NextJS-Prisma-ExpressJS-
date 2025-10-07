@@ -1,6 +1,4 @@
 
-import BlogDetailsCard from "@/components/modules/Blogs/BlogDetailsCard";
-import { getBlogById } from "@/services/PostServices";
 import React from "react";
 
 // export const generateStaticParams = async () => {
@@ -33,11 +31,12 @@ const BlogDetailsPage = async ({
 }) => {
   const { blogId } = await params;
 
-  const blog = await getBlogById(blogId);
+  // const blog = await getBlogById(blogId);
 
   return (
     <div className="py-30 px-4 max-w-7xl mx-auto">
-      <BlogDetailsCard blog={blog} />
+      {/* <BlogDetailsCard blog={blog} /> */}
+      <p>{blogId}</p>
     </div>
   );
 };

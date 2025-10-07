@@ -84,11 +84,11 @@ export default function MultipleImageUploader({
                   key={file.id}
                   className="bg-accent relative aspect-square rounded-md"
                 >
-                  <img
+                  {/* <Image
                     src={file.preview}
                     alt={file.file.name}
                     className="size-full rounded-[inherit] object-cover"
-                  />
+                  /> */}
                   <Button
                     onClick={() => removeFile(file.id)}
                     size="icon"
