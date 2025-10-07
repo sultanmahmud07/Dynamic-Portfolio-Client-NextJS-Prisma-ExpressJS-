@@ -113,9 +113,9 @@ const OurTestimonials: React.FC = () => {
   };
 
   return (
-    <div className="pb-5">
-      <div className="main_container">
-        <h2 className="md:py-5 text-[1.4rem] md:text-3xl text-center">
+    <div className="pb-5 my-8">
+      <div className="main-container">
+        <h2 className="md:py-5 text-[1.4rem] md:text-3xl font-bold text-center">
           What My <span className="text-primary">Clients Say</span>
         </h2>
         <div className="slider_wrapper relative py-5">

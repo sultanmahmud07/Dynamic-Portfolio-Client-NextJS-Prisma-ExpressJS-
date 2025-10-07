@@ -1,15 +1,17 @@
-import AboutUs from "@/components/modules/About/AboutUs";
-import FAQ from "@/components/modules/About/FAQ/FAQ";
+
 import OurTestimonials from "@/components/modules/About/OurTestimonials/OurTestimonials";
+import ResumeSection from "@/components/modules/About/ResumeSection/ResumeSection";
+import VisionSection from "@/components/modules/About/VisionSection/VisionSection";
 import ShareBanner from "@/components/shared/ShareBanner";
 
 const AboutPage = () => {
   return (
     <div className="">
       <ShareBanner title={"About Me"}></ShareBanner>
-      <AboutUs></AboutUs>
+      <VisionSection></VisionSection>
+      <ResumeSection></ResumeSection>
       <OurTestimonials></OurTestimonials>
-      <FAQ></FAQ>
+      {/* <FAQ></FAQ> */}
     </div>
   );
 };

@@ -156,5 +156,5 @@ html {
   color: white;
 }
 .slick-active .slick-dot {
-    background-color: #4E1F00 !important;
+    background-color: var(--secondary) !important;
 }
