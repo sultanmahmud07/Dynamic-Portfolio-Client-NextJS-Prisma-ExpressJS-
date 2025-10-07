@@ -26,8 +26,8 @@ const AboutSection = () => {
         <h2 className="text-start text-3xl font-bold text-gray-900 mb-2">About Me</h2>
 
         <p className="text-start">
-          I’m a passionate{" "}
-          <strong className="text-gray-900">MERN Stack Developer</strong> who
+          I’m <strong className="text-gray-900">Md Shimul Molla</strong>  a passionate{" "}
+          MERN Stack Developerwho
           thrives on crafting{" "}
           <span className="font-medium text-gray-800">
             scalable, high-performance, and user-focused web applications
@@ -42,7 +42,7 @@ const AboutSection = () => {
           <strong>Node.js</strong>, <strong>Express</strong>, and{" "}
           <strong>MongoDB</strong>. I’m also skilled in relational databases like{" "}
           <strong>PostgreSQL</strong> and <strong>MySQL</strong>, ensuring
-          flexibility across diverse data systems.
+          flexibility across diverse data systems.<br></br> My contact <strong>+8801327357894</strong>
         </p>
 
         <p className="text-start text-gray-600 italic border-l-4 border-gray-300 pl-4 mt-6">

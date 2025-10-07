@@ -1,4 +1,5 @@
 
+import ProjectDetails from "@/components/modules/Project/ProjectDetails";
 import React from "react";
 
 // export const generateStaticParams = async () => {
@@ -35,7 +36,7 @@ const BlogDetailsPage = async ({
 
   return (
     <div className="py-30 px-4 max-w-7xl mx-auto">
-      {/* <BlogDetailsCard blog={blog} /> */}
+      <ProjectDetails></ProjectDetails>
       <p>{blogId}</p>
     </div>
   );

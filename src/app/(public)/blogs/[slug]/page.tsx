@@ -1,3 +1,5 @@
+import NewsDetails from "@/components/modules/Blogs/NewsDetails";
+import BlogDetails from "@/components/modules/Blogs/NewsDetails";
 import React from "react";
 
 // export const generateStaticParams = async () => {
@@ -5,17 +7,17 @@ import React from "react";
 //   const { data: blogs } = await res.json();
 
 //   return blogs.slice(0, 2).map((blog: any) => ({
-//     blogId: String(blog.id),
+//     slug: String(blog.id),
 //   }));
 // };
 
 // export const generateMetadata = async ({
 //   params,
 // }: {
-//   params: Promise<{ blogId: string }>;
+//   params: Promise<{ slug: string }>;
 // }) => {
-//   const { blogId } = await params;
-//   const blog = await getBlogById(blogId);
+//   const { slug } = await params;
+//   const blog = await getBlogById(slug);
 
 //   return {
 //     title: blog?.title,
@@ -26,16 +28,14 @@ import React from "react";
 const BlogDetailsPage = async ({
   params,
 }: {
-  params: Promise<{ blogId: string }>;
+  params: Promise<{ slug: string }>;
 }) => {
-  const { blogId } = await params;
 
-  // const blog = await getBlogById(blogId);
+  // const blog = await getBlogById(slug);
 
   return (
-    <div className="py-30 px-4 max-w-7xl mx-auto">
-      {/* <BlogDetailsCard blog={blog} /> */}
-      <p>{blogId}</p>
+    <div className="py-20 md:py-24">
+      <NewsDetails params={params}></NewsDetails>
     </div>
   );
 };

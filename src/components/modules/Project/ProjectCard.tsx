@@ -29,7 +29,7 @@ const ProjectCard = ({ news }: { news: any }) => {
                   </h3>
                   <p className="text-sm md:text-base">Stay ahead with expert insights, clinical tips, and the latest product updates for modern dental professionals.Stay ahead with expert insights, clinical tips.</p>
               <div className="flex">
-                      <Link href="/contact">
+                      <Link href="/projects/project-slug">
                         <Button size="sm" className="flex items-center text-xs flex-wrap gap-3 mr-2 group ">
                               View detail
                               <span className="">

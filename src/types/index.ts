@@ -7,6 +7,9 @@ export interface IResponse<T> {
   message: string;
   data: T;
 }
+export interface IParams {
+  params: Promise<{ slug: string }>
+}
 export interface IMeta {
     limit: number;
     page: number;
