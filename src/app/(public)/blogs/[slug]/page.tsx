@@ -1,5 +1,4 @@
 import NewsDetails from "@/components/modules/Blogs/NewsDetails";
-import BlogDetails from "@/components/modules/Blogs/NewsDetails";
 import React from "react";
 
 // export const generateStaticParams = async () => {

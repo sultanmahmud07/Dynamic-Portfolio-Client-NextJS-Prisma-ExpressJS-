@@ -10,23 +10,6 @@ import { IParams } from '@/types';
 import defaultImage from "@@/default/banner-default-img.png"
 import RecentBlogs from './RecentBlogs';
 
-// Popular Tags Data
-const tags = [
-  "Game",
-  "iPhone",
-  "TV",
-  "Asus Laptops",
-  "Macbook",
-  "SSD",
-  "Graphics Card",
-  "Power Bank",
-  "Smart TV",
-  "Speaker",
-  "Tablet",
-  "Microwave",
-  "Samsung",
-];
-
 const NewsDetails = async ({ params }: IParams) => {
       const slug = (await params).slug
   // const blogData = await getBlogDetails(slug);
@@ -92,19 +75,6 @@ const blog = null
           </div>
           <div className="category_menu w-full md:w-1/3">
             <RecentBlogs></RecentBlogs>
-            {/* POPULAR TAGS */}
-            {/* <h6 className="text-[#191C1F] font-semibold uppercase mt-6 mb-3">Popular Tag</h6>
-            <div className="flex flex-wrap gap-2">
-              {tags.map((tag, index) => (
-                <button
-                  key={index}
-                  // onClick={() => toggleTag(tag)}
-                  className={`px-3 py-1 text-sm rounded-lg border border-gray-300 text-gray-700`}
-                >
-                  {tag}
-                </button>
-              ))}
-            </div> */}
           </div>
         </div>
       </div>
