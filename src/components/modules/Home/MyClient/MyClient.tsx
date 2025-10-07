@@ -54,7 +54,7 @@ const MyClients = () => {
       };
 
       return (
-            <section className="py-5 md:pt-7 pb-2">
+            <section className="py-5 md:py-10">
                   <Slider {...settings}>
                         {clientData.map((client) => (
                               <div key={client.id} className="px-4 md:px-6 flex items-center justify-center">

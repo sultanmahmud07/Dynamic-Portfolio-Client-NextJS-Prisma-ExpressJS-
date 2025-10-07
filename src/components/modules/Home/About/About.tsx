@@ -4,6 +4,7 @@ import aboutIcon from '@@/about/delivery-icon.png'
 import { FaHeart, FaEye } from 'react-icons/fa'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 
 const About = () => {
   return (
@@ -44,7 +45,7 @@ const About = () => {
   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
     <div className="bg-secondary p-3 rounded">
       <h5 className="my-2 flex items-center gap-2 font-semibold text-lg text-primary">
-        <span><FaHeart /></span>Our Mission
+        <span><FaHeart /></span>My Mission
       </h5>
       <p className="text-sm">
         To simplify parcel delivery with technology-driven solutions and trusted logistics support. 
@@ -52,7 +53,7 @@ const About = () => {
     </div>
     <div className="bg-secondary p-3 rounded">
       <h5 className="my-2 flex items-center gap-2 font-semibold text-lg text-primary">
-        <span><FaEye /></span>Our Vision
+        <span><FaEye /></span>My Vision
       </h5>
       <p className="text-sm">
         To become the most reliable and customer-friendly courier service, connecting businesses and people everywhere.
@@ -65,7 +66,7 @@ const About = () => {
     {/* On-Time Delivery */}
     <div>
       <div className="flex justify-between mb-1 font-semibold text-sm">
-        <span>On-Time Delivery</span>
+        <span>Frontend Skills on</span>
         <span>95%</span>
       </div>
       <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -76,7 +77,7 @@ const About = () => {
     {/* Customer Satisfaction */}
     <div>
       <div className="flex justify-between mb-1 font-semibold text-sm">
-        <span>Customer Satisfaction</span>
+        <span>Backend Skills on</span>
         <span>88%</span>
       </div>
       <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -88,9 +89,9 @@ const About = () => {
   {/* About Us Button */}
   <div className="mt-6">
     <Link href={"/about"}>
-    <button className="bg-primary cursor-pointer text-white px-6 py-2 rounded-md text-sm font-semibold shadow">
+    <Button className="cursor-pointer text-white px-6 py-2 rounded-md text-sm font-semibold shadow">
       About Us
-    </button>
+    </Button>
     </Link>
   </div>
 </div>

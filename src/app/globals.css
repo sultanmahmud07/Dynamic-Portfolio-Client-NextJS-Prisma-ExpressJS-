@@ -144,3 +144,17 @@ html {
   width: 90%;
   margin: auto;
 }
+
+#myAchievement{
+  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0)), url(../../public//assets/home/achivment/success-bg.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+.slick-dots li.slick-active button:before {
+  opacity: .75;
+  color: white;
+}
+.slick-active .slick-dot {
+    background-color: #4E1F00 !important;
+}

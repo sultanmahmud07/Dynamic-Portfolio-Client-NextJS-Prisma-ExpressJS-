@@ -20,6 +20,21 @@ const MyProjects = () => {
                   name: "Eco-Friendly Energy Solutions",
                   description: "Reduce your carbon footprint with clean, renewable power."
             },
+            {
+                  image: img3,
+                  name: "Eco-Friendly Energy Solutions",
+                  description: "Reduce your carbon footprint with clean, renewable power."
+            },
+            {
+                  image: img3,
+                  name: "Eco-Friendly Energy Solutions",
+                  description: "Reduce your carbon footprint with clean, renewable power."
+            },
+            {
+                  image: img3,
+                  name: "Eco-Friendly Energy Solutions",
+                  description: "Reduce your carbon footprint with clean, renewable power."
+            },
       ]
       return (
             <section className="pb-5">
