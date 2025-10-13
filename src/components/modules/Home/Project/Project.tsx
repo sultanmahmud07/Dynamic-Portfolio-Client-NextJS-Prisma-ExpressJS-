@@ -1,28 +1,11 @@
-import img1 from "@@/temp/news.png"
-import img2 from "@@/temp/news.png"
-import img3 from "@@/temp/news.png"
+
 import ProjectCard from "../../Project/ProjectCard"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { IProject } from "@/types"
 
-const Project = () => {
-      const data = [
-            {
-                  image: img1,
-                  name: "Quality & Certified Products",
-                  description: "All our systems meet international quality and safety standards."
-            },
-            {
-                  image: img2,
-                  name: "Local Support",
-                  description: "Our expert team is always nearby to assist you when needed."
-            },
-            {
-                  image: img3,
-                  name: "Eco-Friendly Energy Solutions",
-                  description: "Reduce your carbon footprint with clean, renewable power."
-            },
-      ]
+const Project = ({projects}:{projects: IProject[]}) => {
+    
       return (
             <section className="py-5 md:py-10">
                   <div className="main-container">
@@ -39,9 +22,9 @@ const Project = () => {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 py-3 gap-5 md:gap-8">
                               {
-                                    data.map((news, i) => {
+                                    projects.map((project, i) => {
                                           return (
-                                                <ProjectCard key={i} news={news}></ProjectCard>
+                                                <ProjectCard key={i} project={project}></ProjectCard>
 
 
                                           )

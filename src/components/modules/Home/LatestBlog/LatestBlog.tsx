@@ -1,28 +1,10 @@
-import img1 from "@@/temp/news.png"
-import img2 from "@@/temp/news.png"
-import img3 from "@@/temp/news.png"
 import BlogCard from "../../Blogs/BlogCard"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { IBlog } from "@/types"
 
-const LatestBlog = () => {
-      const data = [
-            {
-                  image: img1,
-                  name: "Quality & Certified Products",
-                  description: "All our systems meet international quality and safety standards."
-            },
-            {
-                  image: img2,
-                  name: "Local Support",
-                  description: "Our expert team is always nearby to assist you when needed."
-            },
-            {
-                  image: img3,
-                  name: "Eco-Friendly Energy Solutions",
-                  description: "Reduce your carbon footprint with clean, renewable power."
-            },
-      ]
+const LatestBlog = ({ blogs }: { blogs: IBlog[] }) => {
+  
       return (
             <section className="py-5 md:py-10 border-b">
                   <div className="main-container">
@@ -30,9 +12,9 @@ const LatestBlog = () => {
                         <p className="text-center mx-auto md:w-3/4 text-sm md:text-base">Our EV chargers meet the highest international safety and performance standards, including UL, CE, and RoHS certifications. Engineered for reliability and built to last, each product undergoes rigorous testing to ensure seamless operation in every environment.</p>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-10 py-5  md:pt-10">
                               {
-                                    data.map((news, i) => {
+                                    blogs.map((blog, i) => {
                                           return (
-                                               <BlogCard key={i} news={news}></BlogCard>
+                                               <BlogCard key={i} blog={blog}></BlogCard>
 
 
                                           )

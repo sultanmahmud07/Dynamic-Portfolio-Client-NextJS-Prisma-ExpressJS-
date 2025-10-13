@@ -1,5 +1,6 @@
 
 import ProjectDetails from "@/components/modules/Project/ProjectDetails";
+import { getProjectBySlug } from "@/services/ProjectServices";
 import React from "react";
 
 // export const generateStaticParams = async () => {
@@ -28,16 +29,15 @@ import React from "react";
 const BlogDetailsPage = async ({
   params,
 }: {
-  params: Promise<{ blogId: string }>;
+  params: Promise<{ slug: string }>;
 }) => {
-  const { blogId } = await params;
+  const { slug } = await params;
 
-  // const blog = await getBlogById(blogId);
+  const project = await getProjectBySlug(slug);
 
   return (
-    <div className="py-30 px-4 max-w-7xl mx-auto">
-      <ProjectDetails></ProjectDetails>
-      <p>{blogId}</p>
+    <div className="py-20">
+      <ProjectDetails project={project} />
     </div>
   );
 };

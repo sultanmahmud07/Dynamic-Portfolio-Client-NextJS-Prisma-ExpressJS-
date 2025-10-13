@@ -5,8 +5,30 @@ export interface IAuthor {
   email: string;
   password: string;
   role: string;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IProject {
+  id: number;
+  title: string;
+  slug: string;
+  category: string | undefined;
+  description: string;
+  content: string;
+  features: string[];
+  technologies: string[];
+  liveUrl?: string;
+  repoUrl?: string;
+  isFeatured: boolean;
+  views: number;
+  thumbnail: string;
+  images: string[];
+  deleteImages: string[];
+  createdAt: string;
+  updatedAt: string;
+  authorId: number;
+  author: IAuthor;
 }
 
 export interface IBlog {
