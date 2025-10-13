@@ -1,4 +1,30 @@
 import { ComponentType } from "react";
+export interface IAuthor {
+  id: number;
+  name: string;
+  email: string;
+  password: string;
+  role: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface IBlog {
+  id: number;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  thumbnail: string;
+  tags: string[];
+  isFeatured: boolean;
+  published: boolean;
+  views: number;
+  IId: number;
+  author: IAuthor;
+  createdAt: string;
+  updatedAt: string;
+}
 
 
 export interface IResponse<T> {
@@ -42,7 +68,7 @@ export interface ISidebarItem {
   }[];
 }
 
-export type TRole = "SUPER_ADMIN" | "ADMIN" | "SENDER" | "RECEIVER" | "USER";
+export type TRole = "SUPER_ADMIN" | "ADMIN" | "USER";
 
 type ZodIssue = {
   code: string;

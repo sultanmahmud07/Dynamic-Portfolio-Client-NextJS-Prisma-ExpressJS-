@@ -1,5 +1,5 @@
 import NewsDetails from "@/components/modules/Blogs/NewsDetails";
-import React from "react";
+import { getBlogBySlug } from "@/services/PostServices";
 
 // export const generateStaticParams = async () => {
 //   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/post`);
@@ -29,12 +29,11 @@ const BlogDetailsPage = async ({
 }: {
   params: Promise<{ slug: string }>;
 }) => {
-
-  // const blog = await getBlogById(slug);
-
+      const slug = (await params).slug
+  const blog = await getBlogBySlug(slug);
   return (
     <div className="py-20 md:py-24">
-      <NewsDetails params={params}></NewsDetails>
+      <NewsDetails blog={blog}></NewsDetails>
     </div>
   );
 };

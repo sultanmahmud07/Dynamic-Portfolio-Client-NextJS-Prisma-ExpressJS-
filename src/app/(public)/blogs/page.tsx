@@ -1,6 +1,7 @@
 
 import Blogs from "@/components/modules/Blogs/Blogs";
 import ShareBanner from "@/components/shared/ShareBanner";
+import { getAllBlogs } from "@/services/PostServices";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -10,14 +11,11 @@ export const metadata: Metadata = {
 };
 
 const AllBlogsPage = async () => {
-  // const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/post`, {
-  //   cache: "no-store",
-  // });
-  // const { data: blogs } = await res.json();
+  const blogs = await getAllBlogs({limit:30});
   return (
     <div className="">
       <ShareBanner title={"My Blogs"}></ShareBanner>
-      <Blogs></Blogs>
+      <Blogs blogs={blogs.data}></Blogs>
     </div>
   );
 };

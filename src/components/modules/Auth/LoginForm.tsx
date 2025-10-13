@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-import { FieldValues, useForm } from "react-hook-form";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -14,45 +14,73 @@ import {
 } from "@/components/ui/form";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
-// type LoginFormValues = {
-//   email: string;
-//   password: string;
-// };
+type LoginFormValues = {
+  email: string;
+  password: string;
+};
 
 export default function LoginForm() {
-  const form = useForm<FieldValues>({
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
+  const form = useForm<LoginFormValues>({
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = async (values: FieldValues) => {
+  const onSubmit = async (values: LoginFormValues) => {
+    setLoading(true);
     try {
-      // const res = await login(values);
-      // if (res?.id) {
-      //   toast.success("User Logged in Successfully");
-      // } else {
-      //   toast.error("User Login Failed");
-      // }
-      signIn("credentials", {
-        ...values,
-        callbackUrl: "/dashboard",
-      });
-    } catch (err) {
-      console.error(err);
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_API}/auth/login`,
+        values,
+         { withCredentials: true }
+      );
+      console.log(response.data);
+      const { message, data } = response.data;
+      const token = data?.accessToken;
+      const userId = data?.user.id;
+
+      if (token) {
+        localStorage.setItem("token", token);
+        localStorage.setItem("user_id", userId);
+        toast.success(message || "Login successful!", {
+          position: "top-center",
+        });
+
+        router.push("/"); // ✅ redirect after success
+      } else {
+        toast.error("Invalid response from server.");
+      }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.error(error?.response?.data);
+      toast.error(
+        error?.response?.data?.message || "Failed to login. Try again.",
+        { position: "top-center" }
+      );
+    } finally {
+      setLoading(false);
     }
   };
+
   return (
     <div className="flex justify-center items-center pt-20 md:pt-32">
       <div className="space-y-6 w-full max-w-md bg-white p-8 rounded-lg shadow-md">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-6 w-full max-w-md"
+            className="space-y-6 w-full"
           >
-            <h2 className="text-3xl font-bold text-center">Login</h2>
+            <h2 className="text-3xl font-bold text-center text-gray-800">
+              Login
+            </h2>
 
             {/* Email */}
             <FormField
@@ -66,6 +94,7 @@ export default function LoginForm() {
                       type="email"
                       placeholder="Enter your email"
                       {...field}
+                      disabled={loading}
                     />
                   </FormControl>
                   <FormMessage />
@@ -85,6 +114,7 @@ export default function LoginForm() {
                       type="password"
                       placeholder="Enter your password"
                       {...field}
+                      disabled={loading}
                     />
                   </FormControl>
                   <FormMessage />
@@ -92,34 +122,36 @@ export default function LoginForm() {
               )}
             />
 
-            <Button type="submit" className="w-full mt-2">
-              Login
+            <Button
+              type="submit"
+              className="w-full mt-2"
+              disabled={loading}
+            >
+              {loading ? "Logging in..." : "Login"}
             </Button>
 
             <div className="flex items-center justify-center space-x-2">
               <div className="h-px w-16 bg-gray-300" />
-              <span className="text-sm text-gray-500">or continue with</span>
+              <span className="text-sm text-gray-500">
+                or continue with
+              </span>
               <div className="h-px w-16 bg-gray-300" />
             </div>
           </form>
         </Form>
-        {/* Social Login Buttons */}
-        <div className="flex flex-col gap-3 mt-3">
 
+        {/* Social Login */}
+        <div className="flex flex-col gap-3 mt-3">
           <Button
             variant="outline"
             className="flex items-center justify-center gap-2"
             onClick={() =>
-              signIn("google", {
-                callbackUrl: "/dashboard",
-              })
+              signIn("google", { callbackUrl: "/dashboard" })
             }
           >
-            {/* Google */}
             <Image
               src="https://img.icons8.com/color/24/google-logo.png"
               alt="Google"
-              className="w-5 h-5"
               width={20}
               height={20}
             />
