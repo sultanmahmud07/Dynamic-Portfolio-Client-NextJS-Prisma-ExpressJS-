@@ -32,7 +32,6 @@ const Navbar = () => {
 
   console.log("Access Token:", token); // ✅ Will show after hydration
   const isAdmin = Boolean(token);
-  const navigate = useRouter();
   useEffect(() => {
     const handleScroll = () => {
       const offset = window.scrollY;
