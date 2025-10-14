@@ -1,5 +1,4 @@
 "use client"
-import React, { useEffect, useState } from "react";
 import logo from "../../../../public/logo.jpg";
 import { FaFacebookF, FaLinkedinIn, FaPhone, FaYoutube } from "react-icons/fa";
 import { IoLogoInstagram } from "react-icons/io5";
@@ -9,12 +8,30 @@ import Image from "next/image";
 import Link from "next/link";
 import NavLink from "./NavLink";
 import { Button } from "@/components/ui/button";
+import { getCookie } from "cookies-next/client";
+import React, { useEffect, useState } from "react";
+import { logout } from "@/utils/logout";
+
+
 
 const Navbar = () => {
   const [navToggle, setNavToggle] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [token, setToken] = useState<string | null>(null);
+    const router = useRouter();
+
+  useEffect(() => {
+    const cookieValue = getCookie("accessToken");
+    const localValue = localStorage.getItem("token");
+    const finalToken = localValue || (cookieValue ? cookieValue.toString() : null);
+    if (finalToken) {
+      setToken(finalToken);
+    }
+  }, []);
+
+
+  console.log("Access Token:", token); // ✅ Will show after hydration
+  const isAdmin = Boolean(token);
   const navigate = useRouter();
   useEffect(() => {
     const handleScroll = () => {
@@ -28,17 +45,27 @@ const Navbar = () => {
 
     window.addEventListener('scroll', handleScroll);
 
-   
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
-  const handleLogout = async () => {
-    // await logout(undefined);
-    // dispatch(authApi.util.resetApiState());
-    navigate.push("/login")
-  };
+// Check token on mount & whenever localStorage/cookie changes
+useEffect(() => {
+  const cookieValue = getCookie("accessToken");
+  const localValue = localStorage.getItem("token");
+  const finalToken = localValue || (cookieValue ? cookieValue.toString() : null);
+  setToken(finalToken);
+}, []);
+
+// Logout handler
+const handleLogout = async () => {
+  await logout();
+  setToken(null);       // ← this ensures Navbar re-renders immediately
+  router.push("/login"); // navigate to login page
+};
+
 
   const navigationLinks = [
     { href: "/", label: "Home", role: "PUBLIC" },
@@ -124,12 +151,24 @@ const Navbar = () => {
                     </React.Fragment>
                   )
                 })}
+              {
+                isAdmin &&
+                <li className=" md:mx-1 py-2 lg:py-6 relative">
+                  <NavLink
+                    onClick={() => setNavToggle(false)}
+                    href="/dashboard"
+                    className={`flex font-semibold transition uppercase text-sm items-center gap-2 `}
+                  >
+                    Dashboard
+                  </NavLink>
+                </li>
+              }
             </ul>
           </div>
           {/* Right side here >>>>>>>>>>>>>>>> */}
           <div className="nav_right_side hidden lg:block ">
             <div className="flex justify-end items-center gap-2">
-              { isAdmin ? (
+              {isAdmin ? (
                 <Button
                   onClick={handleLogout}
                   variant="outline"
@@ -137,17 +176,17 @@ const Navbar = () => {
                 >
                   Logout
                 </Button>
-              ):
-              <Button asChild className="text-sm rounded-full px-7">
+              ) :
+                <Button asChild className="text-sm rounded-full px-7">
                   <Link href="/login">Login</Link>
                 </Button>
-                }
+              }
             </div>
           </div>
           {/* Right toggle bar for mobile  */}
           {/* Mobile Toggle Button */}
           <div className="lg:hidden">
-             <div className="flex justify-end items-center gap-2">
+            <div className="flex justify-end items-center gap-2">
               {isAdmin && (
                 <Button
                   onClick={handleLogout}
@@ -163,35 +202,35 @@ const Navbar = () => {
                 </Button>
               )}
 
-            <label className="cursor-pointer">
-              <input
-                type="checkbox"
-                className="hidden"
-                checked={navToggle}
-                onChange={() => setNavToggle((prev) => !prev)}
-              />
-              {navToggle ? (
-                <svg
-                  className="fill-current text-primary"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="28"
-                  height="28"
-                  viewBox="0 0 512 512"
-                >
-                  <polygon points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49" />
-                </svg>
-              ) : (
-                <svg
-                  className="fill-current text-primary"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="28"
-                  height="28"
-                  viewBox="0 0 512 512"
-                >
-                  <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
-                </svg>
-              )}
-            </label>
+              <label className="cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="hidden"
+                  checked={navToggle}
+                  onChange={() => setNavToggle((prev) => !prev)}
+                />
+                {navToggle ? (
+                  <svg
+                    className="fill-current text-primary"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="28"
+                    height="28"
+                    viewBox="0 0 512 512"
+                  >
+                    <polygon points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49" />
+                  </svg>
+                ) : (
+                  <svg
+                    className="fill-current text-primary"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="28"
+                    height="28"
+                    viewBox="0 0 512 512"
+                  >
+                    <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
+                  </svg>
+                )}
+              </label>
             </div>
           </div>
         </div>
