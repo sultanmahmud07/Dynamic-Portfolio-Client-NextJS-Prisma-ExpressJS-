@@ -52,7 +52,7 @@ export default function ManageBlogs() {
     setIsLoading(true);
     try {
       const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_BASE_API}/post?page=${currentPage}&limit=10&searchTerm=${searchTerm}&sort=${sortOrder}`,
+        `${process.env.NEXT_PUBLIC_BASE_API}/post?page=${currentPage}&limit=10&search=${searchTerm}&sort=${sortOrder}`,
         { withCredentials: true }
       );
       console.log(res.data.data)
@@ -69,7 +69,7 @@ export default function ManageBlogs() {
   useEffect(() => {
     fetchBlogs();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage, sortOrder]);
+  }, [currentPage, sortOrder, searchTerm]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -99,25 +99,36 @@ export default function ManageBlogs() {
   };
 
   // Handle Toggle (e.g., feature or block)
-  const handleUpdateBlog = async (blog: IBlog) => {
-    const toastId = toast.loading("Updating...");
-    try {
-      const res = await axios.patch(
-        `${process.env.NEXT_PUBLIC_BASE_API}/post/${blog.id}`,
-        { isFeatured: !blog.isFeatured },
-        { withCredentials: true }
-      );
-      console.log(res.data);
-      toast.dismiss(toastId);
-      toast.success("Blog updated successfully!");
-      fetchBlogs();
-    } catch (err) {
-      console.error(err);
-      const error = err as IApiError;
-      toast.error(error?.data?.message || "Update failed");
-      toast.dismiss(toastId);
-    }
-  };
+const handleUpdateBlog = async (blog: IBlog) => {
+  const toastId = toast.loading("Updating...");
+  try {
+    const token = localStorage.getItem("token"); // ✅ get token from localStorage
+
+    const res = await axios.patch(
+      `${process.env.NEXT_PUBLIC_BASE_API}/post/update/${blog.id}`,
+      { isFeatured: !blog.isFeatured },
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `${token}`, // ✅ attach token
+          // or "Bearer " + token if your backend expects Bearer tokens
+          // Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    console.log(res.data);
+    toast.dismiss(toastId);
+    toast.success("Blog updated successfully!");
+    fetchBlogs();
+  } catch (err) {
+    console.error(err);
+    const error = err as IApiError;
+    toast.error(error?.data?.message || "Update failed");
+    toast.dismiss(toastId);
+  }
+};
+
 
   return (
     <div className="w-full ">
@@ -137,8 +148,8 @@ export default function ManageBlogs() {
           <SelectContent>
             <SelectGroup>
               <SelectLabel>Order By</SelectLabel>
-              <SelectItem value="createdAt">Ascending</SelectItem>
-              <SelectItem value="-createdAt">Descending</SelectItem>
+              <SelectItem value="asc">Ascending</SelectItem>
+              <SelectItem value="desc">Descending</SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>
