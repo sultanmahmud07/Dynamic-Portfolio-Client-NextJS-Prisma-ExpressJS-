@@ -32,18 +32,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { IApiError, IBlog } from "@/types";
+import { IApiError, IProject } from "@/types";
 import { Switch } from "@/components/ui/switch";
 import Loader from "@/components/shared/Spinner";
 import { formatDate } from "@/utils/getDateFormater";
 import Link from "next/link";
 import axios from "axios";
+import Image from "next/image";
 
-export default function ManageBlogs() {
+export default function ManageProjects() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("");
-  const [blogs, setBlogs] = useState<IBlog[]>([]);
+  const [projects, setProjects] = useState<IProject[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [totalPage, setTotalPage] = useState(1);
 
@@ -52,15 +53,15 @@ export default function ManageBlogs() {
     setIsLoading(true);
     try {
       const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_BASE_API}/post?page=${currentPage}&limit=10&search=${searchTerm}&sort=${sortOrder}`,
+        `${process.env.NEXT_PUBLIC_BASE_API}/project?page=${currentPage}&limit=10&search=${searchTerm}&sort=${sortOrder}`,
         { withCredentials: true }
       );
       console.log(res.data.data)
-      setBlogs(res.data.data.data || []);
+      setProjects(res.data.data.data || []);
       setTotalPage(res.data.data.pagination?.totalPage || 1);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to fetch blogs");
+      toast.error("Failed to fetch projects");
     } finally {
       setIsLoading(false);
     }
@@ -82,18 +83,10 @@ export default function ManageBlogs() {
   // Handle Delete
   const handleRemoveBlog = async (blogId: number) => {
     const toastId = toast.loading("Deleting...");
-    const token = localStorage.getItem("token");
     try {
       const res = await axios.delete(
-        `${process.env.NEXT_PUBLIC_BASE_API}/post/delete/${blogId}`,
-        {
-          withCredentials: true,
-          headers: {
-            Authorization: `${token}`, // ✅ attach token
-            // or "Bearer " + token if your backend expects Bearer tokens
-            // Authorization: `Bearer ${token}`,
-          },
-        }
+        `${process.env.NEXT_PUBLIC_BASE_API}/post/${blogId}`,
+        { withCredentials: true }
       );
       console.log(res)
       toast.dismiss(toastId);
@@ -107,35 +100,35 @@ export default function ManageBlogs() {
   };
 
   // Handle Toggle (e.g., feature or block)
-  const handleUpdateBlog = async (blog: IBlog) => {
-    const toastId = toast.loading("Updating...");
-    try {
-      const token = localStorage.getItem("token");
+const handleUpdateProject = async (project: IProject) => {
+  const toastId = toast.loading("Updating...");
+  try {
+    const token = localStorage.getItem("token"); // ✅ get token from localStorage
 
-      const res = await axios.patch(
-        `${process.env.NEXT_PUBLIC_BASE_API}/post/update/${blog.id}`,
-        { isFeatured: !blog.isFeatured },
-        {
-          withCredentials: true,
-          headers: {
-            Authorization: `${token}`, // ✅ attach token
-            // or "Bearer " + token if your backend expects Bearer tokens
-            // Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+    const res = await axios.patch(
+      `${process.env.NEXT_PUBLIC_BASE_API}/project/update/${project.id}`,
+      { isFeatured: !project.isFeatured },
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `${token}`, // ✅ attach token
+          // or "Bearer " + token if your backend expects Bearer tokens
+          // Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-      console.log(res.data);
-      toast.dismiss(toastId);
-      toast.success("Blog updated successfully!");
-      fetchBlogs();
-    } catch (err) {
-      console.error(err);
-      const error = err as IApiError;
-      toast.error(error?.data?.message || "Update failed");
-      toast.dismiss(toastId);
-    }
-  };
+    console.log(res.data);
+    toast.dismiss(toastId);
+    toast.success("Blog updated successfully!");
+    fetchBlogs();
+  } catch (err) {
+    console.error(err);
+    const error = err as IApiError;
+    toast.error(error?.data?.message || "Update failed");
+    toast.dismiss(toastId);
+  }
+};
 
 
   return (
@@ -163,68 +156,88 @@ export default function ManageBlogs() {
         </Select>
       </div>
 
-      <Table>
-        <TableHeader>
-          <TableRow className="bg-secondary">
-            <TableHead>Title</TableHead>
-            <TableHead>Author</TableHead>
-            <TableHead>Featured</TableHead>
-            <TableHead>Views</TableHead>
-            <TableHead>Created</TableHead>
-            <TableHead className="text-center">Action</TableHead>
-          </TableRow>
-        </TableHeader>
+  <Table>
+  <TableHeader>
+    <TableRow className="bg-secondary">
+      <TableHead>Image</TableHead> {/* 👈 Added */}
+      <TableHead>Title</TableHead>
+      <TableHead>Author</TableHead>
+      <TableHead>Featured</TableHead>
+      <TableHead>Views</TableHead>
+      <TableHead>Created</TableHead>
+      <TableHead className="text-center">Action</TableHead>
+    </TableRow>
+  </TableHeader>
 
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <TableBody>
-            {blogs?.length ? (
-              blogs.map((blog: IBlog) => (
-                <TableRow key={blog.id} className="bg-white shadow">
-                  <TableCell className="font-medium">{blog.title}</TableCell>
-                  <TableCell>{blog.author?.name || "N/A"}</TableCell>
-                  <TableCell>
-                    <div className="flex items-center space-x-2">
-                      <Switch
-                        id={`blog-${blog.id}`}
-                        checked={blog.isFeatured}
-                        onClick={() => handleUpdateBlog(blog)}
-                      />
-                      <Label htmlFor={`blog-${blog.id}`}>Featured</Label>
-                    </div>
+  {isLoading ? (
+    <Loader />
+  ) : (
+    <TableBody>
+      {projects?.length ? (
+        projects.map((project: IProject) => (
+          <TableRow key={project.id} className="bg-white shadow">
+            
+            {/* ✅ Thumbnail Column */}
+            <TableCell>
+              <div className="w-16 h-16 overflow-hidden rounded-md border bg-gray-50">
+                <Image
+                width={200}
+                height={200}
+                  src={project.images[0] || "/default-img.png"}
+                  alt={project.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </TableCell>
+
+            <TableCell className="font-medium">
+              <p className="font-semibold">{project.title}</p>
+              <p className="text-primary uppercase">{project.category || "uncategorized"}</p>
                   </TableCell>
-                  <TableCell>{blog.views}</TableCell>
-                  <TableCell>{formatDate(blog.createdAt)}</TableCell>
-                  <TableCell className="flex items-center gap-2">
-                    <Link
-                      className="w-full cursor-pointer"
-                      href={`/blogs/${blog.slug}`}
-                    >
-                      <Button size="sm">
-                        <EyeIcon />
-                      </Button>
-                    </Link>
-                    <DeleteConfirmation
-                      onConfirm={() => handleRemoveBlog(blog.id)}
-                    >
-                      <Button size="sm">
-                        <Trash2 />
-                      </Button>
-                    </DeleteConfirmation>
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={5} className="text-center">
-                  No blogs found.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        )}
-      </Table>
+            <TableCell>{project.author?.name || "N/A"}</TableCell>
+
+            <TableCell>
+              <div className="flex items-center space-x-2">
+                <Switch
+                  id={`project-${project.id}`}
+                  checked={project.isFeatured}
+                  onClick={() => handleUpdateProject(project)}
+                />
+                <Label htmlFor={`project-${project.id}`}>Featured</Label>
+              </div>
+            </TableCell>
+
+            <TableCell>{project.views}</TableCell>
+            <TableCell>{formatDate(project.createdAt)}</TableCell>
+
+            <TableCell className="flex pt-6 items-center gap-2">
+              <Link
+                className="w-full cursor-pointer"
+                href={`/projects/${project.slug}`}
+              >
+                <Button size="sm">
+                  <EyeIcon />
+                </Button>
+              </Link>
+              <DeleteConfirmation onConfirm={() => handleRemoveBlog(project.id)}>
+                <Button size="sm">
+                  <Trash2 />
+                </Button>
+              </DeleteConfirmation>
+            </TableCell>
+          </TableRow>
+        ))
+      ) : (
+        <TableRow>
+          <TableCell colSpan={6} className="text-center">
+            No projects found.
+          </TableCell>
+        </TableRow>
+      )}
+    </TableBody>
+  )}
+</Table>
+
 
       {totalPage > 1 && (
         <div className="flex justify-end mt-4">

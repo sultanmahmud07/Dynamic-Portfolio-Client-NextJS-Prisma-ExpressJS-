@@ -28,7 +28,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         { title: "Create Blog", url: "/dashboard/create-blog", icon: CopyPlus },
         { title: "Manage Blog", url: "/dashboard/manage-blog", icon: PencilRuler },
         { title: "Add Project", url: "/dashboard/add-project", icon: CopyPlus },
-        { title: "Manage Project", url: "/dashboard/manage-project", icon: FolderOpenDot },
+        { title: "My Project", url: "/dashboard/manage-project", icon: FolderOpenDot },
       ]
     },
     {

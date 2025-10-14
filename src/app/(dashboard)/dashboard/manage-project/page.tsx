@@ -1,8 +1,9 @@
+import ManageProjects from "@/components/modules/Dashboard/Projects/ManageProjects"
 
 const Page = () => {
   return (
     <div>
-      <h1>Manage Project</h1>
+      <ManageProjects></ManageProjects>
     </div>
   )
 }   
