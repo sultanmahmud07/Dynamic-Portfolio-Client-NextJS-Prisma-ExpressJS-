@@ -1,8 +1,9 @@
+import ManageBlogs from "@/components/modules/Dashboard/Blogs/ManageBlogs"
 
 const Page = () => {
   return (
     <div>
-      <h1>Manage blog</h1>
+      <ManageBlogs></ManageBlogs>
     </div>
   )
 }   

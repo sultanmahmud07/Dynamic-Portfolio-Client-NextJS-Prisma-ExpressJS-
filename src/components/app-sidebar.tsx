@@ -42,7 +42,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
       <SidebarHeader>
-        <Link href="/" className=" border-b border-black mb-2 w-full py-3">
+        <Link href="/" className="w-full py-3">
           <Image
             src={logo}
             alt="logo"
