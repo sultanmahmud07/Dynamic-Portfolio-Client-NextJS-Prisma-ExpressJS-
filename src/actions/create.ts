@@ -1,36 +1,41 @@
 "use server";
 
-import { getUserSession } from "@/helpers/getUserSession";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 
-export const create = async (data: FormData) => {
-  const session = await getUserSession();
-  const blogInfo = Object.fromEntries(data.entries());
-  const modifiedData = {
-    ...blogInfo,
-    tags: blogInfo.tags
-      .toString()
-      .split(",")
-      .map((tag) => tag.trim()),
-    authorId: session?.user?.id,
-    isFeatured: Boolean(blogInfo.isFeatured),
-  };
+export const createBlog = async (data: FormData) => {
+  try {
+    // ✅ Get accessToken from cookies (sent by backend on login)
+    const accessToken = (await cookies()).get('accessToken')?.value
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/post`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(modifiedData),
-  });
+    if (!accessToken) {
+      throw new Error("You must be logged in to create a blog");
+    }
 
-  const result = await res.json();
+    // ✅ Send the form data to your backend API
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/post/create`, {
+      method: "POST",
+      body: data,
+      credentials: "include", // include cookies in request
+      headers: {
+        Authorization: `Bearer ${accessToken}`, // include token if required
+      },
+    });
 
-  if (result?.id) {
-    revalidateTag("BLOGS");
-    revalidatePath("/blogs");
-    redirect("/");
+    const result = await res.json();
+
+    // ✅ On success, revalidate and redirect
+    if (result?.id) {
+      revalidateTag("BLOGS");
+      revalidatePath("/blogs");
+      redirect("/");
+    }
+
+    return result;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    console.error("Error creating blog:", error.message);
+    return { success: false, message: error.message };
   }
-  return result;
 };

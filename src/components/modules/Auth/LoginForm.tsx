@@ -12,8 +12,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import Image from "next/image";
-import { signIn } from "next-auth/react";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -54,7 +52,7 @@ export default function LoginForm() {
           position: "top-center",
         });
 
-        router.push("/"); // ✅ redirect after success
+        router.push("/dashboard"); // ✅ redirect after success
       } else {
         toast.error("Invalid response from server.");
       }
@@ -139,25 +137,6 @@ export default function LoginForm() {
             </div>
           </form>
         </Form>
-
-        {/* Social Login */}
-        <div className="flex flex-col gap-3 mt-3">
-          <Button
-            variant="outline"
-            className="flex items-center justify-center gap-2"
-            onClick={() =>
-              signIn("google", { callbackUrl: "/dashboard" })
-            }
-          >
-            <Image
-              src="https://img.icons8.com/color/24/google-logo.png"
-              alt="Google"
-              width={20}
-              height={20}
-            />
-            Login with Google
-          </Button>
-        </div>
       </div>
     </div>
   );

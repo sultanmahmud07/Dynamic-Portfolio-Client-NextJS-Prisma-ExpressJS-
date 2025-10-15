@@ -158,3 +158,14 @@ html {
 .slick-active .slick-dot {
     background-color: var(--secondary) !important;
 }
+.ql-editor {
+  min-height: 200px !important;
+}
+
+.ql-increaseSize::before {
+  content: '+';
+}
+
+.ql-decreaseSize::before {
+  content: '-';
+}
