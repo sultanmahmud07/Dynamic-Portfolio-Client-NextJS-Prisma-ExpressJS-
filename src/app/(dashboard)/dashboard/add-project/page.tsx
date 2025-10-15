@@ -1,8 +1,9 @@
+import CreateProjectForm from "@/components/modules/Dashboard/Projects/CreateProjectForm"
 
 const Page = () => {
   return (
     <div>
-      <h1>Add Project</h1>
+      <CreateProjectForm />
     </div>
   )
 }   

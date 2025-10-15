@@ -92,7 +92,7 @@ const navigate = useRouter();
             <label className="block font-medium mb-1">Title</label>
             <input
               {...register("title")}
-              className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-orange-500 outline-none"
               placeholder="Enter blog title..."
             />
             {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>}
@@ -101,7 +101,7 @@ const navigate = useRouter();
             <label className="block font-medium mb-1">Slug</label>
             <input
               {...register("slug")}
-              className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-orange-500 outline-none"
               placeholder="Enter slug..."
             />
             {errors.slug && <p className="text-red-500 text-sm mt-1">{errors.slug.message}</p>}
@@ -114,7 +114,7 @@ const navigate = useRouter();
           <textarea
             {...register("excerpt")}
             rows={2}
-            className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-orange-500 outline-none"
             placeholder="Short description..."
           />
           {errors.excerpt && <p className="text-red-500 text-sm mt-1">{errors.excerpt.message}</p>}
@@ -130,10 +130,10 @@ const navigate = useRouter();
             <input
               value={tagInput}
               onChange={e => setTagInput(e.target.value)}
-              className="flex-1 border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+              className="flex-1 border rounded-lg px-4 py-2 focus:ring-2 focus:ring-orange-500 outline-none"
               placeholder="Enter a tag"
             />
-            <button type="button" onClick={handleAddTag} className="bg-blue-600 text-white px-4 rounded hover:bg-blue-700 transition">
+            <button type="button" onClick={handleAddTag} className="bg-primary text-white px-4 rounded hover:bg-orange-700 transition">
               Add
             </button>
           </div>
@@ -181,7 +181,7 @@ const navigate = useRouter();
         <button
           disabled={isSubmitting}
           type="submit"
-          className="px-6 py-2.5 bg-primary text-white rounded-lg font-medium hover:bg-blue-700 disabled:opacity-70"
+          className="px-6 py-2.5 bg-primary text-white rounded-lg font-medium hover:bg-orange-700 disabled:opacity-70"
         >
           {isSubmitting ? "Submitting..." : "Publish Blog"}
         </button>

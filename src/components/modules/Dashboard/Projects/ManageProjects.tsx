@@ -49,7 +49,7 @@ export default function ManageProjects() {
   const [totalPage, setTotalPage] = useState(1);
 
   // Fetch blogs
-  const fetchBlogs = async () => {
+  const fetchProjects = async () => {
     setIsLoading(true);
     try {
       const res = await axios.get(
@@ -68,7 +68,7 @@ export default function ManageProjects() {
   };
 
   useEffect(() => {
-    fetchBlogs();
+    fetchProjects();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, sortOrder, searchTerm]);
 
@@ -81,54 +81,60 @@ export default function ManageProjects() {
   };
 
   // Handle Delete
-  const handleRemoveBlog = async (blogId: number) => {
+  const handleRemoveProject = async (projectId: number) => {
     const toastId = toast.loading("Deleting...");
+    const token = localStorage.getItem("token");
     try {
       const res = await axios.delete(
-        `${process.env.NEXT_PUBLIC_BASE_API}/post/${blogId}`,
-        { withCredentials: true }
+        `${process.env.NEXT_PUBLIC_BASE_API}/project/delete/${projectId}`,
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
       );
       console.log(res)
       toast.dismiss(toastId);
-      toast.success("Blog deleted successfully!");
-      fetchBlogs();
+      toast.success("Project deleted successfully!");
+      fetchProjects();
     } catch (err) {
       toast.dismiss(toastId);
       console.error(err);
-      toast.error("Failed to delete blog");
+      toast.error("Failed to delete project");
     }
   };
 
   // Handle Toggle (e.g., feature or block)
-const handleUpdateProject = async (project: IProject) => {
-  const toastId = toast.loading("Updating...");
-  try {
-    const token = localStorage.getItem("token"); // ✅ get token from localStorage
+  const handleUpdateProject = async (project: IProject) => {
+    const toastId = toast.loading("Updating...");
+    try {
+      const token = localStorage.getItem("token"); // ✅ get token from localStorage
 
-    const res = await axios.patch(
-      `${process.env.NEXT_PUBLIC_BASE_API}/project/update/${project.id}`,
-      { isFeatured: !project.isFeatured },
-      {
-        withCredentials: true,
-        headers: {
-          Authorization: `${token}`, // ✅ attach token
-          // or "Bearer " + token if your backend expects Bearer tokens
-          // Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+      const res = await axios.patch(
+        `${process.env.NEXT_PUBLIC_BASE_API}/project/update/${project.id}`,
+        { isFeatured: !project.isFeatured },
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `${token}`, // ✅ attach token
+            // or "Bearer " + token if your backend expects Bearer tokens
+            // Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    console.log(res.data);
-    toast.dismiss(toastId);
-    toast.success("Blog updated successfully!");
-    fetchBlogs();
-  } catch (err) {
-    console.error(err);
-    const error = err as IApiError;
-    toast.error(error?.data?.message || "Update failed");
-    toast.dismiss(toastId);
-  }
-};
+      console.log(res.data);
+      toast.dismiss(toastId);
+      toast.success("Blog updated successfully!");
+      fetchProjects();
+    } catch (err) {
+      console.error(err);
+      const error = err as IApiError;
+      toast.error(error?.data?.message || "Update failed");
+      toast.dismiss(toastId);
+    }
+  };
 
 
   return (
@@ -156,87 +162,87 @@ const handleUpdateProject = async (project: IProject) => {
         </Select>
       </div>
 
-  <Table>
-  <TableHeader>
-    <TableRow className="bg-secondary">
-      <TableHead>Image</TableHead> {/* 👈 Added */}
-      <TableHead>Title</TableHead>
-      <TableHead>Author</TableHead>
-      <TableHead>Featured</TableHead>
-      <TableHead>Views</TableHead>
-      <TableHead>Created</TableHead>
-      <TableHead className="text-center">Action</TableHead>
-    </TableRow>
-  </TableHeader>
-
-  {isLoading ? (
-    <Loader />
-  ) : (
-    <TableBody>
-      {projects?.length ? (
-        projects.map((project: IProject) => (
-          <TableRow key={project.id} className="bg-white shadow">
-            
-            {/* ✅ Thumbnail Column */}
-            <TableCell>
-              <div className="w-16 h-16 overflow-hidden rounded-md border bg-gray-50">
-                <Image
-                width={200}
-                height={200}
-                  src={project.images[0] || "/default-img.png"}
-                  alt={project.title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </TableCell>
-
-            <TableCell className="font-medium">
-              <p className="font-semibold">{project.title}</p>
-              <p className="text-primary uppercase">{project.category || "uncategorized"}</p>
-                  </TableCell>
-            <TableCell>{project.author?.name || "N/A"}</TableCell>
-
-            <TableCell>
-              <div className="flex items-center space-x-2">
-                <Switch
-                  id={`project-${project.id}`}
-                  checked={project.isFeatured}
-                  onClick={() => handleUpdateProject(project)}
-                />
-                <Label htmlFor={`project-${project.id}`}>Featured</Label>
-              </div>
-            </TableCell>
-
-            <TableCell>{project.views}</TableCell>
-            <TableCell>{formatDate(project.createdAt)}</TableCell>
-
-            <TableCell className="flex pt-6 items-center gap-2">
-              <Link
-                className="w-full cursor-pointer"
-                href={`/projects/${project.slug}`}
-              >
-                <Button size="sm">
-                  <EyeIcon />
-                </Button>
-              </Link>
-              <DeleteConfirmation onConfirm={() => handleRemoveBlog(project.id)}>
-                <Button size="sm">
-                  <Trash2 />
-                </Button>
-              </DeleteConfirmation>
-            </TableCell>
+      <Table>
+        <TableHeader>
+          <TableRow className="bg-secondary">
+            <TableHead>Image</TableHead> {/* 👈 Added */}
+            <TableHead>Title</TableHead>
+            <TableHead>Author</TableHead>
+            <TableHead>Featured</TableHead>
+            <TableHead>Views</TableHead>
+            <TableHead>Created</TableHead>
+            <TableHead className="text-center">Action</TableHead>
           </TableRow>
-        ))
-      ) : (
-        <TableRow>
-          <TableCell colSpan={6} className="text-center">
-            No projects found.
-          </TableCell>
-        </TableRow>
-      )}
-    </TableBody>
-  )}
-</Table>
+        </TableHeader>
+
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <TableBody>
+            {projects?.length ? (
+              projects.map((project: IProject) => (
+                <TableRow key={project.id} className="bg-white shadow">
+
+                  {/* ✅ Thumbnail Column */}
+                  <TableCell>
+                    <div className="w-16 h-16 overflow-hidden rounded-md border bg-gray-50">
+                      <Image
+                        width={200}
+                        height={200}
+                        src={project.images[0] || "/default-img.png"}
+                        alt={project.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </TableCell>
+
+                  <TableCell className="font-medium">
+                    <p className="font-semibold">{project.title.slice(0, 30)}..</p>
+                    <p className="text-primary uppercase">{project.category || "uncategorized"}</p>
+                  </TableCell>
+                  <TableCell>{project.author?.name || "N/A"}</TableCell>
+
+                  <TableCell>
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id={`project-${project.id}`}
+                        checked={project.isFeatured}
+                        onClick={() => handleUpdateProject(project)}
+                      />
+                      <Label htmlFor={`project-${project.id}`}>Featured</Label>
+                    </div>
+                  </TableCell>
+
+                  <TableCell>{project.views}</TableCell>
+                  <TableCell>{formatDate(project.createdAt)}</TableCell>
+
+                  <TableCell className="flex pt-6 items-center gap-2">
+                    <Link
+                      className="w-full cursor-pointer"
+                      href={`/projects/${project.slug}`}
+                    >
+                      <Button size="sm">
+                        <EyeIcon />
+                      </Button>
+                    </Link>
+                    <DeleteConfirmation onConfirm={() => handleRemoveProject(project.id)}>
+                      <Button size="sm">
+                        <Trash2 />
+                      </Button>
+                    </DeleteConfirmation>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={6} className="text-center">
+                  No projects found.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        )}
+      </Table>
 
 
       {totalPage > 1 && (
