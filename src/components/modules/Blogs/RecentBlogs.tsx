@@ -12,7 +12,7 @@ const RecentBlogs = ({blogs}: {blogs: IBlog[]}) => {
                         {
                               blogs.map((blog, i) => {
                                     return (
-                                         <Link key={i} href={`/blog/${blog.slug}`}>
+                                         <Link key={i} href={`/blogs/${blog.slug}`}>
                                           <div className="blog-card p-3 rounded shadow">
                                                 <h3 className="capitalize text-baser md:text-md text-black font-medium">
                                                       {blog.title}

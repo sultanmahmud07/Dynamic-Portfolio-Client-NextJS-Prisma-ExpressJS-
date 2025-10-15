@@ -1,8 +1,10 @@
 
 import Blogs from "@/components/modules/Blogs/Blogs";
-import ShareBanner from "@/components/shared/ShareBanner";
 import { getAllBlogs } from "@/services/PostServices";
 import { Metadata } from "next";
+import Link from "next/link";
+import { GoHome } from "react-icons/go";
+import { IoIosArrowForward } from "react-icons/io";
 
 export const metadata: Metadata = {
   title: "All Blogs | Next Blog",
@@ -13,8 +15,17 @@ export const metadata: Metadata = {
 const AllBlogsPage = async () => {
   const blogs = await getAllBlogs({limit:30});
   return (
-    <div className="">
-      <ShareBanner title={"My Blogs"}></ShareBanner>
+    <div className="pt-30">
+       <div className="category_top bg-gray-100 py-4 md:py-6 mb-5">
+             <div className="main-container">
+               <div className="text-[#1F1C1466] text-sm font-semibold flex items-center gap-1">
+                 <span className="text-xl"><GoHome /></span>
+                 <Link href={`/`} className="hover:text-primary">Home</Link>
+                 <span><IoIosArrowForward /></span>
+                 <Link href={`/blogs`} className="text-primary">Blogs</Link>
+               </div>
+             </div>
+           </div>
       <Blogs blogs={blogs.data}></Blogs>
     </div>
   );

@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Mr Shimul | Portfolio",
-  description: "Welcome to my portfolio website! I'm Md Shimul Molla, a passionate web developer and designer. Explore my projects, skills, and experience in the world of web development.",
+  title: "Sultan Mahmud | Portfolio",
+  description: "Welcome to my portfolio website! I'm Sultan Mahmud, a passionate web developer and designer. Explore my projects, skills, and experience in the world of web development.",
 };
 
 export default function RootLayout({

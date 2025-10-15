@@ -26,8 +26,8 @@ const AboutSection = () => {
         <h2 className="text-start text-3xl font-bold text-gray-900 mb-2">About Me</h2>
 
         <p className="text-start">
-          I’m <strong className="text-gray-900">Md Shimul Molla</strong>  a passionate{" "}
-          MERN Stack Developerwho
+          I’m <strong className="text-gray-900">Sultan Mahmud</strong>  a passionate{" "}
+          MERN Stack Developer who
           thrives on crafting{" "}
           <span className="font-medium text-gray-800">
             scalable, high-performance, and user-focused web applications

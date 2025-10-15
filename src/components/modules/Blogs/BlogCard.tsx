@@ -14,13 +14,13 @@ const BlogCard = ({ blog }: { blog: IBlog }) => {
                               alt={blog.title}
                               width={400}
                               height={400}
-                              className="w-full transition-transform duration-700 ease-in-out group-hover:scale-110"
+                              className="w-full aspect-[16/10] object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
                         />
                   </div>
                   <h3 className="capitalize md:pt-2 text-md md:text-xl text-black font-semibold">
                         {blog.title}
                   </h3>
-                  <p className="text-sm md:text-base">{blog.excerpt}</p>
+                  <p className="text-sm md:text-base">{blog.excerpt.slice(0, 100)}...</p>
                   <p className='flex items-center gap-1 text-sm'><span><CalendarDays /></span>{new Date(blog.createdAt).toLocaleDateString()}</p>
                  <Link className='cursor-pointer' href={`/blogs/${blog.slug}`}>
                   <p className='flex items-center gap-2 md:gap-4 text-sm text-primary font-semibold'>

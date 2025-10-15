@@ -17,7 +17,7 @@ const ProjectCard = ({ project }: { project: IProject }) => {
                               alt={project.title}
                               width={400}
                               height={400}
-                              className="w-full transition-transform duration-700 ease-in-out group-hover:scale-110"
+                              className="w-full aspect-[16/10] object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
                         />
                   </div>
                   <div className="flex items-center justify-between">
@@ -27,7 +27,7 @@ const ProjectCard = ({ project }: { project: IProject }) => {
                   <h3 className="capitalize  text-md md:text-xl text-black font-semibold">
                         {project.title}
                   </h3>
-                  <p className="text-sm md:text-base">{project.description}</p>
+                  <p className="text-sm md:text-base">{project.description.slice(0, 100)}...</p>
               <div className="flex">
                       <Link className='cursor-pointer' href={`/projects/${project.slug}`}>
                         <Button size="sm" className="flex items-center text-xs flex-wrap gap-3 mr-2 group ">

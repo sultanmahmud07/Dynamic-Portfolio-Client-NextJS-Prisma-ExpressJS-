@@ -19,7 +19,7 @@ const NewsDetails = async ({ blog }: { blog: IBlog }) => {
   console.log(recentBlogs.data)
   return (
     <div className="">
-      <div className="category_top bg-base-100 py-4 md:py-6">
+      <div className="category_top bg-gray-100 py-4 md:py-6">
         <div className="main-container">
           <div className="text-[#1F1C1466] text-sm font-semibold flex items-center gap-1">
             <span className="text-xl"><GoHome /></span>
