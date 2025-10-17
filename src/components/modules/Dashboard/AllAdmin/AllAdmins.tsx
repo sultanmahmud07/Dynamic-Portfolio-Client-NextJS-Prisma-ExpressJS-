@@ -17,7 +17,7 @@ import {
       PaginationNext,
       PaginationPrevious,
 } from "@/components/ui/pagination";
-import { EyeIcon, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { formatDate } from "@/utils/getDateFormater";
@@ -26,7 +26,6 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import axios from "axios";
 import Loader from "@/components/shared/Spinner";
 import { IUser } from "@/types";
-import Link from "next/link";
 
 
 export default function AllAdminList() {

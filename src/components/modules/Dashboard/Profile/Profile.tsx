@@ -13,12 +13,12 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
 import { formatDate } from "@/utils/getDateFormater";
 import { IApiError, IUser } from "@/types";
 import Loader from "@/components/shared/Spinner";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 // ---- Zod schema for password change ----
 const passwordSchema = z
@@ -35,9 +35,9 @@ const passwordSchema = z
 type PasswordFormValues = z.infer<typeof passwordSchema>;
 
 const Profile = () => {
-    const [profile, setProfile] = useState<IUser | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
- 
+  const [profile, setProfile] = useState<IUser | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
   const form = useForm<PasswordFormValues>({
     resolver: zodResolver(passwordSchema),
     defaultValues: {
@@ -48,30 +48,35 @@ const Profile = () => {
   });
 
   const onSubmit = async (data: PasswordFormValues) => {
-    const toastId = toast.loading("Removing...");
     const newData = {
       oldPassword: data.oldPassword,
       newPassword: data.newPassword
     }
     try {
-
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_API}/auth/change-password`,
+        newData,
+        { withCredentials: true }
+      );
+      console.log(res.data)
+      toast.success("Password changed successfully");
     } catch (err) {
       console.error(err);
       const error = err as IApiError;
       toast.error(`${error.data.message}`);
-      toast.dismiss(toastId)
     }
   };
   // Fetch blogs
   const fetchBlogs = async () => {
     setIsLoading(true);
+    const userId = localStorage.getItem("user_id");
     try {
       const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_BASE_API}/post`,
+        `${process.env.NEXT_PUBLIC_BASE_API}/user/${userId}`,
         { withCredentials: true }
       );
-      console.log(res.data.data)
-      setProfile(res.data.data.data || null);
+      // console.log(res.data.data)
+      setProfile(res.data.data || null);
     } catch (error) {
       console.error(error);
       toast.error("Failed to fetch blogs");
@@ -84,7 +89,7 @@ const Profile = () => {
     fetchBlogs();
   }, []);
 
- if (isLoading) {
+  if (isLoading) {
     return (<Loader></Loader>)
   }
   return (
@@ -99,7 +104,7 @@ const Profile = () => {
               <strong>Name:</strong> {profile?.name}
             </p>
             <p>
-              <strong>Email:</strong> {profile  ?.email}
+              <strong>Email:</strong> {profile?.email}
             </p>
             <p>
               <strong>Role:</strong> {profile?.role}
@@ -109,10 +114,10 @@ const Profile = () => {
               <span
                 className={`${profile?.isActive === "ACTIVE"
                   ? "text-green-600"
-                  : "text-red-600"
+                  : "text-green-600"
                   }`}
               >
-                {profile?.isActive}
+                Active
               </span>
             </p>
             <p>
