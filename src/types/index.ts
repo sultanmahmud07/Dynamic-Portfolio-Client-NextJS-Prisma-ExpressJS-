@@ -59,11 +59,11 @@ export interface IParams {
   params: Promise<{ slug: string }>
 }
 export interface IMeta {
-    limit: number;
-    page: number;
-    total: number;
-    totalPage: number;
-  }
+  limit: number;
+  page: number;
+  total: number;
+  totalPage: number;
+}
 export interface IResponseWithMeta<T> {
   statusCode: number;
   success: boolean;
@@ -122,7 +122,7 @@ export interface IAuth {
 }
 
 export interface IUser {
-  _id: string;
+  id: string;
   name: string;
   email: string;
   password: string;
@@ -131,12 +131,12 @@ export interface IUser {
   isVerified: boolean;
   role: TRole;
   auths: IAuth[];
-  createdAt: string; 
+  createdAt: string;
   updatedAt: string;
 }
 export interface IContact {
   id: number;
-  name: string; 
+  name: string;
   email: string;
   phone: string;
   message: string;

@@ -1,8 +1,9 @@
+import AllAdminList from "@/components/modules/Dashboard/AllAdmin/AllAdmins"
 
 const Page = () => {
   return (
     <div>
-      <h1>Account</h1>
+      <AllAdminList></AllAdminList>
     </div>
   )
 }   

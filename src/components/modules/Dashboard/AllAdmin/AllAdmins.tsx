@@ -1,3 +1,4 @@
+"use client";
 import { DeleteConfirmation } from "@/components/DeleteConfirmation";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,24 +19,24 @@ import {
 } from "@/components/ui/pagination";
 import { EyeIcon, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { useState } from "react";
-import { Link } from "react-router";
+import { useEffect, useState } from "react";
 import { formatDate } from "@/utils/getDateFormater";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { UserActionMenu } from "./UserActionMenu";
-import { useGetAllUserQuery, useUpdateUserMutation } from "@/redux/features/user/user.api";
-import { IApiError, IUser } from "@/types";
-import Loader from "@/pages/Spinner";
+import axios from "axios";
+import Loader from "@/components/shared/Spinner";
+import { IUser } from "@/types";
+import Link from "next/link";
 
 
-export default function AllUserList() {
+export default function AllAdminList() {
       const [currentPage, setCurrentPage] = useState(1);
       const [limit] = useState(10);
       const [searchTerm, setSearchTerm] = useState("")
       const [sortOrder, setSortOrder] = useState("")
-      const { data, isLoading } = useGetAllUserQuery({ page: currentPage, limit, searchTerm, sort: sortOrder });
-      const [updateUserByAdmin] = useUpdateUserMutation();
+      const [allAdmins, setAllAdmins] = useState<IUser[]>([]);
+      const [isLoading, setIsLoading] = useState(false);
+      const [totalPage, setTotalPage] = useState(1);
       const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             setSearchTerm(e.target.value)
       }
@@ -45,30 +46,56 @@ export default function AllUserList() {
       }
       const handleRemoveUser = async (userId: string) => {
             const toastId = toast.loading("Removing...");
-            const userInfo = {
-                  isDeleted: true
-            }
+            const token = localStorage.getItem("token");
             try {
-                  const res = await updateUserByAdmin({ userId, userInfo }).unwrap();
-                  if (res.success) {
-                        toast.dismiss(toastId);
-                        toast.success("User delete successfully");
-                  }
+                  const res = await axios.delete(
+                        `${process.env.NEXT_PUBLIC_BASE_API}/post/delete/${userId}`,
+                        {
+                              withCredentials: true,
+                              headers: {
+                                    Authorization: `${token}`, // ✅ attach token
+                              },
+                        }
+                  );
+                  console.log(res)
+                  toast.dismiss(toastId);
+                  toast.success("Blog deleted successfully!");
             } catch (err) {
+                  toast.dismiss(toastId);
                   console.error(err);
-                  const error = err as IApiError;
-                  toast.error(`${error.data.message}`);
+                  toast.error("Failed to delete blog");
+            }
+      };
+      const fetchBlogs = async () => {
+            setIsLoading(true);
+            try {
+                  const res = await axios.get(
+                        `${process.env.NEXT_PUBLIC_BASE_API}/user?page=${currentPage}&limit=${limit}&search=${searchTerm}&sort=${sortOrder}`,
+                        { withCredentials: true }
+                  );
+                  console.log(res.data)
+                  setAllAdmins(res.data.data || []);
+                  setTotalPage(res.data.data.pagination?.totalPage || 1);
+            } catch (error) {
+                  console.error(error);
+                  toast.error("Failed to fetch blogs");
+            } finally {
+                  setIsLoading(false);
             }
       };
 
-      const totalPage = data?.meta?.totalPage || 1;
-      // console.log(data)
+      useEffect(() => {
+            fetchBlogs();
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, [currentPage, sortOrder, searchTerm]);
+
+
 
 
       return (
             <div className="w-full ">
                   <div className="flex flex-col md:flex-row justify-between items-center gap-3 mb-4">
-                        <h1 className="text-2xl font-bold">Manage User</h1>
+                        <h1 className="text-2xl font-bold">Manage Admin</h1>
                         <Input
                               className="w-full md:w-sm"
                               type="text"
@@ -91,7 +118,7 @@ export default function AllUserList() {
                   </div>
                   <Table>
                         <TableHeader>
-                              <TableRow>
+                              <TableRow className="bg-secondary">
                                     <TableHead className="">Name</TableHead>
                                     <TableHead>Email</TableHead>
                                     <TableHead>Role</TableHead>
@@ -105,27 +132,21 @@ export default function AllUserList() {
                                     <Loader></Loader>
                                     :
                                     <TableBody>
-                                          {data?.data.map((user: IUser) => (
-                                                <TableRow key={user._id}>
+                                          {allAdmins?.map((user: IUser) => (
+                                                <TableRow className="bg-white" key={user.id}>
                                                       <TableCell className="font-bold uppercase">{user.name}</TableCell>
                                                       <TableCell className="font-medium">{user.email}</TableCell>
                                                       <TableCell>{user.role}</TableCell>
                                                       <TableCell className="">{formatDate(user.createdAt)}</TableCell>
-                                                      <TableCell>{user.isActive}</TableCell>
-                                                      <TableCell className="flex items-center justify-end gap-2">
-                                                            <Link className="cursor-pointer" to={`/admin/user/${user._id}`}>
-                                                                  <Button size="sm">
-                                                                        <EyeIcon />
-                                                                  </Button>
-                                                            </Link>
+                                                      <TableCell className="text-green-500">Active</TableCell>
+                                                      <TableCell className="flex items-center justify-center gap-2">
                                                             <DeleteConfirmation
-                                                                  onConfirm={() => handleRemoveUser(user._id)}
+                                                                  onConfirm={() => handleRemoveUser(user.id)}
                                                             >
                                                                   <Button size="sm">
                                                                         <Trash2 />
                                                                   </Button>
                                                             </DeleteConfirmation>
-                                                            <UserActionMenu user={user}></UserActionMenu>
                                                       </TableCell>
                                                 </TableRow>
                                           ))}

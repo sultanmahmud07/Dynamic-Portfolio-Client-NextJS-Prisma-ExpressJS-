@@ -1,8 +1,9 @@
+import Profile from "@/components/modules/Dashboard/Profile/Profile"
 
 const Page = () => {
   return (
     <div>
-      <h1>Manage Profile</h1>
+      <Profile></Profile>
     </div>
   )
 }   

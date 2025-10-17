@@ -118,7 +118,7 @@ export default function AllContactList() {
                   </div>
                   <Table>
                         <TableHeader>
-                              <TableRow>
+                              <TableRow className="bg-secondary">
                                     <TableHead className="">Name</TableHead>
                                     <TableHead>Email</TableHead>
                                     <TableHead>Phone</TableHead>
@@ -133,7 +133,7 @@ export default function AllContactList() {
                                     :
                                     <TableBody>
                                           {contact?.map((user: IContact) => (
-                                                <TableRow key={user.id}>
+                                                <TableRow className="bg-white" key={user.id}>
                                                       <TableCell className="font-bold uppercase">{user.name}</TableCell>
                                                       <TableCell className="font-medium">{user.email}</TableCell>
                                                       <TableCell>{user.phone}</TableCell>
