@@ -15,7 +15,8 @@ import logo from "@@/logo/logo.jpg";
 import Image from "next/image";
 import Link from "next/link";
 import {
-  BarChart3, CopyPlus, PencilRuler, FolderOpenDot, Settings, UserCog
+  BarChart3, CopyPlus, PencilRuler, FolderOpenDot, Settings, UserCog,
+  MailQuestionMark
 } from "lucide-react";
 import NavLink from "./shared/Navbar/NavLink";
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -29,6 +30,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         { title: "Manage Blog", url: "/dashboard/manage-blog", icon: PencilRuler },
         { title: "Add Project", url: "/dashboard/add-project", icon: CopyPlus },
         { title: "My Project", url: "/dashboard/manage-project", icon: FolderOpenDot },
+        { title: "Contact Queries", url: "/dashboard/contact-queries", icon: MailQuestionMark},
       ]
     },
     {

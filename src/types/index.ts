@@ -135,7 +135,7 @@ export interface IUser {
   updatedAt: string;
 }
 export interface IContact {
-  _id: string;
+  id: number;
   name: string; 
   email: string;
   phone: string;
