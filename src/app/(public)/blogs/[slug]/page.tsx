@@ -1,28 +1,27 @@
 import NewsDetails from "@/components/modules/Blogs/NewsDetails";
-import { getBlogBySlug } from "@/services/PostServices";
+import { getAllBlogs, getBlogBySlug } from "@/services/PostServices";
+import { IBlog } from "@/types";
 
-// export const generateStaticParams = async () => {
-//   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/post`);
-//   const { data: blogs } = await res.json();
+export const generateStaticParams = async () => {
+  const blogs = await getAllBlogs({limit:20});
+  return blogs.data.map((blog: IBlog) => ({
+    slug: String(blog.slug),
+  }));
+};
 
-//   return blogs.slice(0, 2).map((blog: any) => ({
-//     slug: String(blog.id),
-//   }));
-// };
+export const generateMetadata = async ({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) => {
+  const { slug } = await params;
+  const blog = await getBlogBySlug(slug);
 
-// export const generateMetadata = async ({
-//   params,
-// }: {
-//   params: Promise<{ slug: string }>;
-// }) => {
-//   const { slug } = await params;
-//   const blog = await getBlogById(slug);
-
-//   return {
-//     title: blog?.title,
-//     description: blog?.content,
-//   };
-// };
+  return {
+    title: blog?.title,
+    description: blog?.excerpt,
+  };
+};
 
 const BlogDetailsPage = async ({
   params,
@@ -32,7 +31,7 @@ const BlogDetailsPage = async ({
       const slug = (await params).slug
   const blog = await getBlogBySlug(slug);
   return (
-    <div className="py-20 md:py-24">
+    <div className="">
       <NewsDetails blog={blog}></NewsDetails>
     </div>
   );

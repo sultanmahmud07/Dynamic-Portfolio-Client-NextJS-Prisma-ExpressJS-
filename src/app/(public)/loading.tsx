@@ -1,9 +1,9 @@
-import Loading from "@/components/ui/Loading";
+import Loader from "@/components/shared/Spinner";
 
 const BlogsLoadingPage = () => {
   return (
     <div className="py-24">
-      <Loading />
+      <Loader />
     </div>
   );
 };

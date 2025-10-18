@@ -21,25 +21,21 @@ const ProjectDetails = async ({ project }: { project: IProject }) => {
             <p className="short_des text-base md:text-lg">
               {project?.description}
             </p>
-            <div className="grid grid-cols-2 gap-2 pt-2 text-sm md:text-base">
-              <p className="flex items-center gap-2">
-                <span className="font-semibold">From: </span>
-                {project.createdAt}
-              </p>
-              <p className="flex items-center gap-2">
-                <span className="font-semibold">To: </span>
-                {project.updatedAt}
-              </p>
-              <p className="flex items-center gap-2">
-                <span className="font-semibold">Client:</span>
-                Client Nmae
-              </p>
-              <p className="flex items-center gap-2">
-                <span className="font-semibold">Budget:</span>
-                {/* $ {project?.budget} */}
-                999
-              </p>
+            <div className="flex flex-wrap pt-3">
+              {
+                project?.technologies?.map((tech: string, index: number) => (
+                  <span
+                    key={index}
+                    className="tech_item mr-2 mb-2 px-3 py-1 bg-secondary border-primary border dark:bg-gray-700 rounded-full text-sm"
+                  >
+                    {tech}
+                  </span>
+                ))}
             </div>
+            <p className="flex items-center gap-2">
+              <span className="font-semibold">Total View: </span>
+              {project.views || 0}
+            </p>
             <ActionButtons project={project}></ActionButtons>
           </div>
         </div>
@@ -57,6 +53,18 @@ const ProjectDetails = async ({ project }: { project: IProject }) => {
             </a>
           </div>
           <MyContent content={project?.content}></MyContent>
+          <div className="features">
+            <h3 className="text-base font-bold uppercase md:text-xl mb-3">
+              Other Features:
+            </h3>
+            <ul className="list-disc list-inside space-y-2">
+              {project?.features?.map((feature: string, index: number) => (
+                <li key={index} className="text-sm font-semibold">
+                  {feature}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
         <ActionButtons project={project}></ActionButtons>
       </div>

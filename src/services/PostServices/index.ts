@@ -3,7 +3,7 @@
 export const getAllBlogs = async  ({ limit }: { limit?: number }) =>{
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_API}/post?page=1&limit=${limit || 30}`,
+      `${process.env.NEXT_PUBLIC_BASE_API}/post?page=1&limit=${limit || 100}`,
       {
         next: {
           revalidate: 5,

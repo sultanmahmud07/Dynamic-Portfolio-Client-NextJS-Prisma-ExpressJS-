@@ -7,13 +7,13 @@ import { GoHome } from "react-icons/go";
 import { IoIosArrowForward } from "react-icons/io";
 
 export const metadata: Metadata = {
-  title: "All Blogs | Next Blog",
+  title: "Blogs | Techie Delight - Web Development Tutorials & Articles",
   description:
     "Browse all blog posts on web development, Next.js, React, and more. Stay updated with the latest tutorials and articles.",
 };
 
 const AllBlogsPage = async () => {
-  const blogs = await getAllBlogs({limit:30});
+  const blogs = await getAllBlogs({limit:100});
   return (
     <div className="pt-30">
        <div className="category_top bg-gray-100 py-4 md:py-6 mb-5">
