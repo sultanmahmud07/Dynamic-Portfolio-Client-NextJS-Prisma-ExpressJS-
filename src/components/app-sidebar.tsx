@@ -11,7 +11,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import logo from "@@/logo/logo.jpg";
+import logo from "@@/logo/logo.png";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -44,13 +44,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
       <SidebarHeader>
-        <Link href="/" className="w-full py-3">
+        <Link href="/" className="w-full">
           <Image
             src={logo}
             alt="logo"
             width={200}
             height={100}
-            className="w-26"
+            className="w-20"
           />
           {/* <span className="text-primary text-xs uppercase font-bold">Books Finder</span> */}
         </Link>

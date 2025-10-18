@@ -1,9 +1,9 @@
-import CreateBlogForm from "@/components/modules/Dashboard/Blogs/CreateBlogForm";
+import EditProject from "@/components/modules/Dashboard/Projects/EditProject";
 
 const CreateBlog = () => {
   return (
     <div className="w-full">
-      <CreateBlogForm />
+      <EditProject />
     </div>
   );
 };

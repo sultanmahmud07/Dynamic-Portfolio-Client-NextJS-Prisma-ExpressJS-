@@ -1,5 +1,5 @@
 
-import logo from "../../../public/logo.jpg";
+import logo from "@@/logo/logo.png";
 import { FaYoutube } from "react-icons/fa";
 import { FaFacebookF } from "react-icons/fa";
 import { FaLinkedinIn } from "react-icons/fa";

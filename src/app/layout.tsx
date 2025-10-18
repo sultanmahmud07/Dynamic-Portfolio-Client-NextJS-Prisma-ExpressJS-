@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sultan Mahmud | Portfolio",
+  title: "Sultan Mahmud | A Professional Web Developer & Designer",
   description: "Welcome to my portfolio website! I'm Sultan Mahmud, a passionate web developer and designer. Explore my projects, skills, and experience in the world of web development.",
 };
 

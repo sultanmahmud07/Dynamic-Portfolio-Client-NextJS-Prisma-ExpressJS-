@@ -2,9 +2,9 @@
 "use client"
 import { IApiError } from '@/types';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 import { FaFacebookF, FaLinkedinIn, FaYoutube } from 'react-icons/fa';
 import { IoLogoInstagram } from 'react-icons/io5';
-import { toast } from 'sonner';
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -19,37 +19,52 @@ const ContactForm = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    setIsLoading(true);
-    const contactInfo = {
-      name: `${formData.firstName} ${formData.lastName}`,
-      email: formData.email,
-      phone: formData.phone,
-      message: formData.message,
-    }
-    console.log(contactInfo)
-    try {
-      const res = {success: false}
-      if (res.success) {
-        toast.success("Message send successfully");
-        setIsLoading(false);
-        setFormData({
-          firstName: '',
-          lastName: '',
-          email: '',
-          phone: '',
-          message: '',
-        });
+const handleSubmit = async (e: any) => {
+  e.preventDefault();
+  setIsLoading(true);
 
-      }
-    } catch (err) {
-      console.error(err);
-      const error = err as IApiError;
-      setIsLoading(false);
-      toast.error(error?.data?.message || "Failed to create Contact");
-    }
+  const contactInfo = {
+    name: `${formData.firstName} ${formData.lastName}`,
+    email: formData.email,
+    phone: formData.phone,
+    message: formData.message,
   };
+
+  console.log(contactInfo);
+
+  try {
+    // ✅ Send contact info to your backend API
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/contact/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(contactInfo),
+    });
+
+    const data = await res.json();
+    console.log(data);
+    if (res.ok && data?.success) {
+      toast.success("Message sent successfully");
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        message: "",
+      });
+    } else {
+      toast.error(data?.message || "Failed to send message");
+    }
+
+  } catch (err) {
+    console.error(err);
+    const error = err as IApiError;
+    toast.error(error?.data?.message || "Failed to create Contact");
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="py-16">

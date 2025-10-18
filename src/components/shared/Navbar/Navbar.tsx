@@ -1,5 +1,5 @@
 "use client"
-import logo from "../../../../public/logo.jpg";
+import logo from "@@/logo/logo.png";
 import { FaFacebookF, FaLinkedinIn, FaPhone, FaYoutube } from "react-icons/fa";
 import { IoLogoInstagram } from "react-icons/io5";
 import { MdOutlineEmail } from "react-icons/md";

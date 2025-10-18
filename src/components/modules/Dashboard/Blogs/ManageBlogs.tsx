@@ -18,7 +18,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { EyeIcon, Trash2 } from "lucide-react";
+import { EyeIcon, SquarePen, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
@@ -203,6 +203,14 @@ export default function ManageBlogs() {
                     >
                       <Button size="sm">
                         <EyeIcon />
+                      </Button>
+                    </Link>
+                    <Link
+                      className="w-full cursor-pointer"
+                      href={`/dashboard/manage-blog/${blog.id}`}
+                    >
+                      <Button size="sm">
+                        <SquarePen />
                       </Button>
                     </Link>
                     <DeleteConfirmation

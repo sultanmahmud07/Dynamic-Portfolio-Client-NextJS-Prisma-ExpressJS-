@@ -79,7 +79,7 @@ const Profile = () => {
       setProfile(res.data.data || null);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to fetch blogs");
+      toast.error("Failed to fetch Profile Data");
     } finally {
       setIsLoading(false);
     }
