@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,19 +19,61 @@ const blogSchema = z.object({
   file: z.any().optional(),
   isFeatured: z.string().optional(),
   published: z.string().optional(),
+  id: z.number().optional(),
 });
 
 type BlogFormData = z.infer<typeof blogSchema>;
 
-export default function EditBlog() {
+export default function EditBlog({ slug }: { slug: string }) {
   const [formData, setFormData] = useState({ content: "" });
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
   const [filePreview, setFilePreview] = useState<string | null>(null);
-  const { register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm<BlogFormData>({
+  const [loading, setLoading] = useState(true);
+
+  const router = useRouter();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setValue,
+    reset,
+  } = useForm<BlogFormData>({
     resolver: zodResolver(blogSchema),
   });
-const navigate = useRouter();
+
+  // ✅ Fetch previous blog data by slug
+  useEffect(() => {
+    const fetchBlog = async () => {
+      try {
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API}/post/${slug}`);
+        const blog = res.data?.data;
+
+        if (blog) {
+          reset({
+            title: blog.title,
+            slug: blog.slug,
+            id: blog.id,
+            excerpt: blog.excerpt,
+            isFeatured: blog.isFeatured ? "true" : "false",
+            published: blog.published ? "true" : "false",
+          });
+          setFormData({ content: blog.content || "" });
+          setTags(blog.tags || []);
+          if (blog.thumbnail) setFilePreview(blog.thumbnail);
+        }
+      } catch (error) {
+        console.error(error);
+        toast.error("Failed to load blog details");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlog();
+  }, [slug, reset]);
+
   const handleAddTag = () => {
     const t = tagInput.trim();
     if (t && !tags.includes(t)) {
@@ -48,6 +90,7 @@ const navigate = useRouter();
     }
   };
 
+  // ✅ Handle Update
   const onSubmit = async (data: BlogFormData) => {
     try {
       const sendData = new FormData();
@@ -58,13 +101,12 @@ const navigate = useRouter();
       sendData.append("tags", JSON.stringify(tags));
       sendData.append("isFeatured", data.isFeatured || "false");
       sendData.append("published", data.published || "true");
-      sendData.append("views", "0");
-      sendData.append("authorId", String(1)); // Replace with real userId
 
       if (data.file && data.file[0]) sendData.append("file", data.file[0]);
 
       const token = localStorage.getItem("token");
-      await axios.post(`${process.env.NEXT_PUBLIC_BASE_API}/post/create`, sendData, {
+
+      await axios.patch(`${process.env.NEXT_PUBLIC_BASE_API}/post/update/${data.id}`, sendData, {
         withCredentials: true,
         headers: {
           "Content-Type": "multipart/form-data",
@@ -72,18 +114,22 @@ const navigate = useRouter();
         },
       });
 
-      toast.success("Blog created successfully!");
-      navigate.push("/dashboard/manage-blog");
+      toast.success("Blog updated successfully!");
+      router.push("/dashboard/manage-blog");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error(err);
-      toast.error(err.response?.data?.message || "Failed to create blog");
+      toast.error(err.response?.data?.message || "Failed to update blog");
     }
   };
 
+  if (loading) {
+    return <p className="text-center text-gray-600">Loading blog data...</p>;
+  }
+
   return (
     <div className="w-full bg-white p-5 md:p-6 shadow-md rounded-xl">
-      <h2 className="text-2xl font-semibold mb-6 text-gray-800">Create a New Blog</h2>
+      <h2 className="text-2xl font-semibold mb-6 text-gray-800">Edit Blog Post</h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Title & Slug */}
@@ -129,17 +175,23 @@ const navigate = useRouter();
           <div className="flex gap-2 mb-2">
             <input
               value={tagInput}
-              onChange={e => setTagInput(e.target.value)}
+              onChange={(e) => setTagInput(e.target.value)}
               className="flex-1 border rounded-lg px-4 py-2 focus:ring-2 focus:ring-orange-500 outline-none"
               placeholder="Enter a tag"
             />
-            <button type="button" onClick={handleAddTag} className="bg-primary text-white px-4 rounded hover:bg-orange-700 transition">
+            <button
+              type="button"
+              onClick={handleAddTag}
+              className="bg-primary text-white px-4 rounded hover:bg-orange-700 transition"
+            >
               Add
             </button>
           </div>
           <div className="flex flex-wrap gap-2">
             {tags.map((tag, idx) => (
-              <span key={idx} className="bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm">{tag}</span>
+              <span key={idx} className="bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm">
+                {tag}
+              </span>
             ))}
           </div>
         </div>
@@ -183,7 +235,7 @@ const navigate = useRouter();
           type="submit"
           className="px-6 py-2.5 bg-primary text-white rounded-lg font-medium hover:bg-orange-700 disabled:opacity-70"
         >
-          {isSubmitting ? "Submitting..." : "Publish Blog"}
+          {isSubmitting ? "Updating..." : "Update Blog"}
         </button>
       </form>
     </div>

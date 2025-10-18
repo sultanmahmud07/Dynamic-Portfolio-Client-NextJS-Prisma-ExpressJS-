@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,6 +16,7 @@ const projectSchema = z.object({
   slug: z.string().min(3, "Slug is required"),
   description: z.string().min(10, "Description must be at least 10 characters"),
   content: z.string().optional(),
+  id: z.number().optional(),
   features: z.array(z.string()).optional(),
   technologies: z.array(z.string()).optional(),
   liveUrl: z.string().url().optional().or(z.literal("")),
@@ -25,7 +26,7 @@ const projectSchema = z.object({
 
 type ProjectFormData = z.infer<typeof projectSchema>;
 
-export default function EditProject() {
+export default function EditProject({ slug }: { slug: string }) {
   const [formData, setFormData] = useState({ content: "" });
   const [features, setFeatures] = useState<string[]>([]);
   const [featureInput, setFeatureInput] = useState("");
@@ -33,6 +34,8 @@ export default function EditProject() {
   const [techInput, setTechInput] = useState("");
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [deletedImages, setDeletedImages] = useState<string[]>([]); // 🆕 New state
+  const [loadingData, setLoadingData] = useState(true);
 
   const router = useRouter();
 
@@ -44,6 +47,36 @@ export default function EditProject() {
   } = useForm<ProjectFormData>({
     resolver: zodResolver(projectSchema),
   });
+
+  // 🧩 Load existing project data
+  useEffect(() => {
+    const fetchProject = async () => {
+      try {
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API}/project/${slug}`);
+        const project = res.data?.data;
+
+        if (project) {
+          setValue("title", project.title);
+          setValue("slug", project.slug);
+          setValue("description", project.description);
+          setValue("liveUrl", project.liveUrl || "");
+          setValue("repoUrl", project.repoUrl || "");
+          setValue("id", project.id || 0);
+          setFeatures(project.features || []);
+          setTechnologies(project.technologies || []);
+          setFormData({ content: project.content || "" });
+          setImagePreviews(project.images || []);
+        }
+      } catch (err) {
+        console.error(err);
+        toast.error("Failed to load project data");
+      } finally {
+        setLoadingData(false);
+      }
+    };
+
+    fetchProject();
+  }, [slug, setValue]);
 
   // ➕ Add Feature
   const handleAddFeature = () => {
@@ -68,18 +101,28 @@ export default function EditProject() {
     const files = e.target.files ? Array.from(e.target.files) : [];
     if (files.length > 0) {
       const previews = files.map((file) => URL.createObjectURL(file));
-      setImagePreviews(previews);
-      setImageFiles(files);
+      setImagePreviews((prev) => [...prev, ...previews]);
+      setImageFiles((prev) => [...prev, ...files]);
       setValue("images", files);
     }
   };
 
   // ❌ Remove Image Preview
   const removeImage = (index: number) => {
+    const removedImage = imagePreviews[index];
+
+    // If the removed image is an existing one (likely a URL from backend)
+    if (removedImage && !removedImage.startsWith("blob:")) {
+      setDeletedImages((prev) => [...prev, removedImage]); // 🆕 Track for backend deletion
+    }
+
     setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+
+    // Also remove from uploaded files if it’s a new image
     setImageFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
+  // 📝 Update project
   const onSubmit = async (data: ProjectFormData) => {
     try {
       const sendData = new FormData();
@@ -89,19 +132,21 @@ export default function EditProject() {
       sendData.append("content", formData.content || "");
       sendData.append("features", JSON.stringify(features));
       sendData.append("technologies", JSON.stringify(technologies));
-      sendData.append("views", "0");
-      sendData.append("authorId", String(1));
 
       if (data.liveUrl) sendData.append("liveUrl", data.liveUrl);
       if (data.repoUrl) sendData.append("repoUrl", data.repoUrl);
 
-      imageFiles.forEach((file) => {
-        sendData.append("files", file);
-      });
+      // Append new uploaded images
+      imageFiles.forEach((file) => sendData.append("files", file));
+
+      // 🆕 Append deleted images if any
+      if (deletedImages.length > 0) {
+        sendData.append("deleteImages", JSON.stringify(deletedImages));
+      }
 
       const token = localStorage.getItem("token");
 
-      await axios.post(`${process.env.NEXT_PUBLIC_BASE_API}/project/create`, sendData, {
+      await axios.patch(`${process.env.NEXT_PUBLIC_BASE_API}/project/update/${data.id}`, sendData, {
         withCredentials: true,
         headers: {
           "Content-Type": "multipart/form-data",
@@ -109,18 +154,22 @@ export default function EditProject() {
         },
       });
 
-      toast.success("✅ Project created successfully!");
+      toast.success("✅ Project updated successfully!");
       router.push("/dashboard/manage-project");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error(err);
-      toast.error(err.response?.data?.message || "Failed to create project");
+      toast.error(err.response?.data?.message || "Failed to update project");
     }
   };
 
+  if (loadingData) {
+    return <p className="text-center text-gray-600 mt-6">Loading project data...</p>;
+  }
+
   return (
     <div className="w-full bg-white p-6 md:p-8 shadow-md rounded-xl">
-      <h2 className="text-2xl font-semibold mb-6 text-gray-800">Create New Project</h2>
+      <h2 className="text-2xl font-semibold mb-6 text-gray-800">Edit Project</h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         {/* Title & Slug */}
@@ -154,12 +203,10 @@ export default function EditProject() {
             placeholder="Brief summary of the project..."
             className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-orange-500 outline-none"
           />
-          {errors.description && (
-            <p className="text-red-500 text-sm">{errors.description.message}</p>
-          )}
+          {errors.description && <p className="text-red-500 text-sm">{errors.description.message}</p>}
         </div>
 
-        {/* Text Editor for content */}
+        {/* Content */}
         <div>
           <label className="block font-medium mb-1">Detailed Content</label>
           <TextEditor formData={formData} setFormData={setFormData} />
@@ -239,20 +286,14 @@ export default function EditProject() {
           </div>
         </div>
 
-        {/* Multiple Images */}
+        {/* Images */}
         <div>
           <label className="block font-medium mb-1">Project Images</label>
           <div className="flex items-center gap-4">
             <label className="flex items-center gap-2 cursor-pointer border rounded-lg px-4 py-2 hover:bg-gray-100 transition">
               <FiUpload size={18} />
               <span>Upload Images</span>
-              <input
-                type="file"
-                multiple
-                accept="image/*"
-                className="hidden"
-                onChange={handleImagesChange}
-              />
+              <input type="file" multiple accept="image/*" className="hidden" onChange={handleImagesChange} />
             </label>
           </div>
 
@@ -260,13 +301,7 @@ export default function EditProject() {
             <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3 mt-3">
               {imagePreviews.map((src, i) => (
                 <div key={i} className="relative">
-                  <Image
-                    src={src}
-                    width={100}
-                    height={100}
-                    alt={`image-${i}`}
-                    className="object-cover rounded-md"
-                  />
+                  <Image src={src} width={100} height={100} alt={`image-${i}`} className="object-cover rounded-md" />
                   <button
                     type="button"
                     onClick={() => removeImage(i)}
@@ -286,7 +321,7 @@ export default function EditProject() {
           type="submit"
           className="px-6 py-2.5 bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-700 disabled:opacity-70"
         >
-          {isSubmitting ? "Submitting..." : "Create Project"}
+          {isSubmitting ? "Updating..." : "Update Project"}
         </button>
       </form>
     </div>

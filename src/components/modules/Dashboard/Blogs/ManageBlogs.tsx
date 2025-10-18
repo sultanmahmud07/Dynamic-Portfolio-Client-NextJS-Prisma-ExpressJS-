@@ -196,9 +196,9 @@ export default function ManageBlogs() {
                   </TableCell>
                   <TableCell>{blog.views}</TableCell>
                   <TableCell>{formatDate(blog.createdAt)}</TableCell>
-                  <TableCell className="flex items-center gap-2">
+                  <TableCell className="flex items-center justify-center gap-2">
                     <Link
-                      className="w-full cursor-pointer"
+                      className="cursor-pointer"
                       href={`/blogs/${blog.slug}`}
                     >
                       <Button size="sm">
@@ -206,8 +206,8 @@ export default function ManageBlogs() {
                       </Button>
                     </Link>
                     <Link
-                      className="w-full cursor-pointer"
-                      href={`/dashboard/manage-blog/${blog.id}`}
+                      className="cursor-pointer"
+                      href={`/dashboard/manage-blog/${blog.slug}`}
                     >
                       <Button size="sm">
                         <SquarePen />
